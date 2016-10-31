@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Serializable;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -25,6 +26,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  *
@@ -49,7 +54,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
 
     public void Salvar() throws Exception {
         Mapas mapas = new Mapas();
-        if (verificaCampos() ) {
+
+        if (verificaCampos()) {
             mapas.setTitulo(titulo.getText().toUpperCase());
             mapas.setFolha(folha.getText().toUpperCase());
             mapas.setEditora(editora.getText().toUpperCase());
@@ -57,19 +63,29 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             mapas.setAno(String.valueOf(ano.getValue()).toUpperCase());
             mapas.setEscala(escala.getSelectedItem().toString().toUpperCase());
             mapas.setGaveta(gaveta.getSelectedItem().toString().toUpperCase());
-            mapas.setQuantidade(Integer.parseInt(quantidade.getSelectedItem().toString().toUpperCase()));
+            mapas.setQuantidade(quantidade.getSelectedItem().toString().toUpperCase());
             mapas.setImagem(ManipulaBuffImage.getImgBytes(image));
-            modeloTabela.adicionaMapa(mapas);
-            modeloTabela.atualizaListadeMapa(mp);
-            limpaCampos();
-            totalMapas();
-
+            //metodo responsavel por validar os campos na bean.mapas
+            ValidatorFactory validaMapas = Validation.buildDefaultValidatorFactory();
+            Validator validador = validaMapas.getValidator();
+            Set<ConstraintViolation<Mapas>> Alerta = validador.validate(mapas);
+            if (Alerta.size() > 0) {
+                for (ConstraintViolation< Mapas> error : Alerta) {
+                    JOptionPane.showMessageDialog(null, error);
+                }
+            } else {
+                //Envia os dados do mapa para a tabela e salva no banco de dados
+                modeloTabela.adicionaMapa(mapas);
+                modeloTabela.atualizaListadeMapa(mp);
+                limpaCampos();
+                totalMapas();
+            }
         }
     }
 
     public void alterarDados() throws Exception {
         Mapas mapas = new Mapas();
-        if (verificaCampos() ) {
+        if (verificaCampos()) {
             mapas.setCodMapa(id);
             mapas.setTitulo(titulo.getText().toUpperCase());
             mapas.setFolha(folha.getText().toUpperCase());
@@ -78,12 +94,23 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             mapas.setAno(String.valueOf(ano.getValue()).toUpperCase());
             mapas.setEscala(escala.getSelectedItem().toString().toUpperCase());
             mapas.setGaveta(gaveta.getSelectedItem().toString().toUpperCase());
-            mapas.setQuantidade(Integer.parseInt(quantidade.getSelectedItem().toString().toUpperCase()));
+            mapas.setQuantidade(quantidade.getSelectedItem().toString().toUpperCase());
             mapas.setImagem(ManipulaBuffImage.getImgBytes(imagem));
-            modeloTabela.adicionaMapa(mapas);
-            modeloTabela.atualizaListadeMapa(mp);
-            limpaCampos();
-            totalMapas();
+            //metodo responsavel por validar os campos na bean.mapas      
+            ValidatorFactory validaMapas = Validation.buildDefaultValidatorFactory();
+            Validator validador = validaMapas.getValidator();
+            Set<ConstraintViolation<Mapas>> errors = validador.validate(mapas);
+            if (errors.size() > 0) {
+                for (ConstraintViolation< Mapas> error : errors) {
+                    JOptionPane.showMessageDialog(null, error);
+                }
+            } else {
+                //Envia os dados do mapa para a tabela e salva no banco de dados
+                modeloTabela.adicionaMapa(mapas);
+                modeloTabela.atualizaListadeMapa(mp);
+                limpaCampos();
+                totalMapas();
+            }
         }
     }
 
@@ -183,55 +210,14 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     }
 
     public boolean verificaCampos() {
-        if (!titulo.getText().matches("[A-Za-z0-9\\s]+")) {
-            JOptionPane.showMessageDialog(null, "O campo TÍTULO deve conter  o padrão XX.11-X-X  ou XX.11-X-X-1");
-            return false;
-        }else
 
-        if (!folha.getText().matches("[A-Za-z]")) {
-            JOptionPane.showMessageDialog(null, "O campo FOLHA deve conter o padrão  XX.11-X-X  ou XX.11-X-X-1");
-            return false;
-        }else
-        if (editora.getText().equals("")) {
-            JOptionPane.showMessageDialog(null, "O campo EDITORA deve ser preenchido");
-            return false;
-        }else
-        if (tipo.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "O campo TIPO  deve ser selecionado");
-            return false;
-        }else
-        if (escala.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "O campo ESCALA  deve ser selecionado");
-            return false;
-        }else
-        if (gaveta.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "O campo GAVETA  deve ser selecionado");
-            return false;
-        }else
-        if (quantidade.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "O campo QUANTIDADE  deve ser selecionado");
-            return false;
-        }else
         if (imagemMapa.getIcon() == null) {
             JOptionPane.showMessageDialog(null, "Uma IMAGEM  deve ser selecionada");
             return false;
-        }else
-
-        return true;
-
+        } else {
+            return true;
+        }
     }
-//([0-9]{3}.[0-9]{3}.[0-9]{3}-[0-9]{2})
-    public boolean verificaFolha() {
-        if (!titulo.getText().matches("[A-Za-z0-9\\s]+")) {
-            JOptionPane.showMessageDialog(null, "erro no :" + titulo.getText());
-             return false;
-        }
-           
-        else { 
-          
-        }
-        return true;
-            }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -622,8 +608,10 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     private void carregarImagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carregarImagemActionPerformed
         try {
             carregaImagem();
+
         } catch (IOException ex) {
-            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CadMapa.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_carregarImagemActionPerformed
 
@@ -646,20 +634,26 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             if (id == null) {
                 try {
                     Salvar();
+
                 } catch (Exception ex) {
-                    Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(CadMapa.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             } else {
                 try {
                     alterarDados();
 
                 } catch (Exception ex) {
-                    Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(CadMapa.class
+                            .getName()).log(Level.SEVERE, null, ex);
+
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CadMapa.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
+
 
     }//GEN-LAST:event_SalvarMapaActionPerformed
 
@@ -678,8 +672,10 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
                 try {
                     removerMapas();
                     limpaCampos();
+
                 } catch (Exception ex) {
-                    Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(CadMapa.class
+                            .getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
@@ -717,16 +713,24 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(CadMapa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadMapa.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(CadMapa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadMapa.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(CadMapa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadMapa.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(CadMapa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(CadMapa.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>

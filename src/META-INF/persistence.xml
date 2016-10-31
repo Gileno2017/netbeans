@@ -10,7 +10,9 @@
       <property name="javax.persistence.jdbc.user" value="postgres"/>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
       <property name="javax.persistence.jdbc.password" value="Djlennon2016"/>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>   
+      <property name="javax.persistence.validation.group.pre-persist" value="javax.validation.groups.Default"/>
+
     </properties>
   </persistence-unit>
 </persistence>

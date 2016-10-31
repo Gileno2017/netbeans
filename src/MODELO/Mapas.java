@@ -5,7 +5,6 @@
  */
 package MODELO;
 
-
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -14,58 +13,72 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  *
  * @author gileno.macedo
  */
 @Entity
-  @NamedQueries({
-        @NamedQuery(name = "Mapas.ConsultaTodos", query = "SELECT e FROM  Mapas e"),
-          @NamedQuery(name="Mapas.ConsultaporFolha",  query="SELECT e FROM Mapas e WHERE e.folha LIKE :folha"),
-      
-}) 
+@NamedQueries({
+    @NamedQuery(name = "Mapas.ConsultaTodos", query = "SELECT e FROM  Mapas e"),
+    @NamedQuery(name = "Mapas.ConsultaporFolha", query = "SELECT e FROM Mapas e WHERE e.folha LIKE :folha"),})
 public class Mapas implements Serializable {
-     private static final long serialVersionUID = 1L;
- 
-    @OneToMany( mappedBy = "mapas")   
-    @JoinColumn(name="codMapa")
-    
-     private   List<Fotografias> listadeFotografias;
-   
-  @Id
-  @GeneratedValue
+
+    private static final long serialVersionUID = 1L;
+
+    @OneToMany(mappedBy = "mapas")
+    @JoinColumn(name = "codMapa")
+
+    private List<Fotografias> listadeFotografias;
+
+    @Id
+    @GeneratedValue
     private Long codMapa;
-   
-   @Column(length = 30)    
+
+    @NotNull(message = "O campo TÍTULO não pode ser nulo")
+    @NotBlank(message = "O campo TÍTULO deve ser preenchido")
+    @Length(max = 50, message = "O TÍTULO não pode conter mais de {max} caracteres")
     private String titulo;
-    
- @Column(length = 30)    
+
+    @NotNull(message = "O campo ESCALA  não pode ser nulo")
+    @NotBlank(message = "O campo ESCALA deve ser preenchido")
     private String escala;
-    
-    @Column(length = 30)    
+
+    @NotNull(message = "O campo FOLHA não pode ser nulo")
+    @NotBlank(message = "O campo FOLHA deve ser preenchido")
+    @Length(max = 20, message = "O FOLHA não pode conter mais de {max} caracteres")
     private String folha;
-    
-    @Column(length = 50)    
+
+    @NotNull(message = "O campo EDITORA não pode ser nulo")
+    @NotBlank(message = "O campo EDITORA deve ser preenchido")
+    @Length(max = 30, message = "O EDITORA não pode conter mais de {max} caracteres")
     private String editora;
-    
-  @Column(length = 30)    
+
+    @NotNull(message = "O campo TIPO não pode ser nulo")
+    @NotBlank(message = "O campo TIPO deve ser preenchido")
     private String tipo;
-    
-  @Column(length = 10)    
+
+    @Column(length = 10)
     private String ano;
-    
-    @Column(length = 10)    
+
+  @NotNull(message = "O campo GAVETA não pode ser nulo")
+    @NotBlank(message = "O campo GAVETA deve ser preenchido")
     private String gaveta;
     
+    @Lob
+     private byte[] imagem;
 
-    private byte[] imagem;
-    
-    @Column(length = 30)    
-      private int quantidade;
+    @NotNull(message = "O campo QUANTIDADE  não pode ser nulo")
+    @NotBlank(message = "O campo QUANTIDADE deve ser preenchido")
+    private String quantidade;
 
     public List<Fotografias> getListadeFotografias() {
         return listadeFotografias;
@@ -147,14 +160,8 @@ public class Mapas implements Serializable {
         this.imagem = imagem;
     }
 
-    public int getQuantidade() {
-        return quantidade;
-    }
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-
+  
     @Override
     public int hashCode() {
         int hash = 5;
@@ -175,6 +182,14 @@ public class Mapas implements Serializable {
         }
         final Mapas other = (Mapas) obj;
         return Objects.equals(this.codMapa, other.codMapa);
+    }
+
+    public String getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(String quantidade) {
+        this.quantidade = quantidade;
     }
 
 }
