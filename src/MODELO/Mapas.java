@@ -19,6 +19,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Null;
+import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -45,6 +46,7 @@ public class Mapas implements Serializable {
 
     @NotNull(message = "O campo TÍTULO não pode ser nulo")
     @NotBlank(message = "O campo TÍTULO deve ser preenchido")
+     @Pattern(regexp = "[A-Z-0-9\\s]+", message = "o campo TÍTULO deve ser preenchido somente com letras e numeros")
     @Length(max = 50, message = "O TÍTULO não pode conter mais de {max} caracteres")
     private String titulo;
 
@@ -54,11 +56,14 @@ public class Mapas implements Serializable {
 
     @NotNull(message = "O campo FOLHA não pode ser nulo")
     @NotBlank(message = "O campo FOLHA deve ser preenchido")
+      @Pattern(regexp = "([a-zA-Z]{2}\\.[0-9]{2}?\\-[a-zA-Z]{1}?\\-[a-zA-Z]{1}?\\-[0-9]{1}?)|([a-zA-Z]{2}\\.[0-9]{2}?\\-[a-zA-Z]{1}?\\-[a-zA-Z]{1}?)",
+     message = "o campo FOLHA deve ser preenchido  com o formato (XX.11-X-X)  ou  (XX.11-X-X-1)")
     @Length(max = 20, message = "O FOLHA não pode conter mais de {max} caracteres")
     private String folha;
 
     @NotNull(message = "O campo EDITORA não pode ser nulo")
     @NotBlank(message = "O campo EDITORA deve ser preenchido")
+    @Pattern(regexp = "[A-Z\\/d\\s]+", message = "o campo EDITORA deve ser preenchido somente com letras e barra  / ")
     @Length(max = 30, message = "O EDITORA não pode conter mais de {max} caracteres")
     private String editora;
 

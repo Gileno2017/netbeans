@@ -71,7 +71,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             Set<ConstraintViolation<Mapas>> Alerta = validador.validate(mapas);
             if (Alerta.size() > 0) {
                 for (ConstraintViolation< Mapas> error : Alerta) {
-                    JOptionPane.showMessageDialog(null, error);
+                    JOptionPane.showMessageDialog(null, error.getMessage());
                 }
             } else {
                 //Envia os dados do mapa para a tabela e salva no banco de dados
@@ -102,7 +102,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             Set<ConstraintViolation<Mapas>> errors = validador.validate(mapas);
             if (errors.size() > 0) {
                 for (ConstraintViolation< Mapas> error : errors) {
-                    JOptionPane.showMessageDialog(null, error);
+                    JOptionPane.showMessageDialog(null, error.getMessage());
                 }
             } else {
                 //Envia os dados do mapa para a tabela e salva no banco de dados
