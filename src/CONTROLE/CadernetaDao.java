@@ -44,7 +44,7 @@ public class CadernetaDao {
                    }
                 }
                 cc = em.merge(cc);// faz update no banco de dados
-                JOptionPane.showMessageDialog(null, "Dados Alterado com Sucesso!!");
+               // JOptionPane.showMessageDialog(null, "Dados Alterado com Sucesso!!");
             }     
             em.getTransaction().commit();
             }finally{

@@ -35,7 +35,7 @@ public class MapasDao {
             em.getTransaction().begin();
             if (mapa.getCodMapa() == null) {
                 em.persist(mapa);// salva mapa no banco de dados
-                JOptionPane.showMessageDialog(null, "Dados Salvo com Sucesso!!");
+               // JOptionPane.showMessageDialog(null, "Dados Salvo com Sucesso!!");
             } else {
                 if (!em.contains(mapa)) {
                     if (em.find(Mapas.class, mapa.getCodMapa()) == null) {
@@ -43,7 +43,7 @@ public class MapasDao {
                     }
                 }
                 mapa = em.merge(mapa);// faz update no banco de dados
-                JOptionPane.showMessageDialog(null, "Dados Alterado com Sucesso!!");
+            //   JOptionPane.showMessageDialog(null, "Dados Alterado com Sucesso!!");
             }
             em.getTransaction().commit();
         } finally {

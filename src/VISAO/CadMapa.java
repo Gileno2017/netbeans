@@ -76,7 +76,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             } else {
                 //Envia os dados do mapa para a tabela e salva no banco de dados
                 modeloTabela.adicionaMapa(mapas);
-                modeloTabela.atualizaListadeMapa(mp);
+               
                 limpaCampos();
                 totalMapas();
             }
@@ -106,10 +106,12 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
                 }
             } else {
                 //Envia os dados do mapa para a tabela e salva no banco de dados
-                modeloTabela.adicionaMapa(mapas);
-                modeloTabela.atualizaListadeMapa(mp);
+                 modeloTabela.adicionaMapa(mapas);         
+                 modeloTabela.atualizaListadeMapa(mp);
+                
                 limpaCampos();
                 totalMapas();
+            
             }
         }
     }
@@ -173,8 +175,11 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
 
     public void limpaCampos() {
         titulo.setText("");
+        titulo.setEditable(true);
         folha.setText("");
+        folha.setEditable(true);
         editora.setText("");
+        editora.setEditable(true);
         tipo.setSelectedItem(null);
         gaveta.setSelectedItem(null);
         imagemMapa.setIcon(null);
@@ -182,6 +187,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         quantidade.setSelectedItem(null);
         ano.setValue(2016);
         id = null;
+        
 
     }
 
@@ -191,6 +197,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         totalMapas.setText(String.valueOf(total));
 
     }
+  
+    
 
     public void linhaSelecionada() {
         mp = modeloTabela.getLinhaCaderneta(tabela.getSelectedRow());
@@ -641,8 +649,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
                 }
             } else {
                 try {
-                    alterarDados();
-
+                   alterarDados();
                 } catch (Exception ex) {
                     Logger.getLogger(CadMapa.class
                             .getName()).log(Level.SEVERE, null, ex);

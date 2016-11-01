@@ -17,7 +17,7 @@ import javax.swing.table.AbstractTableModel;
 public class MapasTableModel extends AbstractTableModel{
     
       public List<Mapas> ListMapas;
-    private  MapasDao mDao = new MapasDao();
+    private final  MapasDao mDao = new MapasDao();
     
 
 
@@ -105,12 +105,12 @@ public class MapasTableModel extends AbstractTableModel{
     }
 
     public void removeMapa(Mapas m) {        
-        ListMapas.remove(m);
+        ListMapas.remove(m);      
         fireTableRowsInserted(ListMapas.size() - 1, ListMapas.size() - 1);
     }
 
     public void atualizaListadeMapa(Mapas m) throws Exception {
-        ListMapas.remove(m);
+        ListMapas.remove(m);             
         fireTableRowsInserted(ListMapas.size() - 1, ListMapas.size() - 1);
 
     }
