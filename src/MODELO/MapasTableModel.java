@@ -27,7 +27,7 @@ public class MapasTableModel extends AbstractTableModel{
 
     }
 
-    public Mapas getLinhaCaderneta(int linha) {
+    public Mapas getLinhaMapas(int linha) {
         return ListMapas.get(linha);
     }
 
@@ -67,6 +67,8 @@ public class MapasTableModel extends AbstractTableModel{
         }
 
     }
+    
+
 
       @Override
     public Object getValueAt(int rowIndex, int columnIndex) {

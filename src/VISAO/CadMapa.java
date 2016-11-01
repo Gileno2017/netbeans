@@ -38,6 +38,7 @@ import javax.validation.ValidatorFactory;
 public class CadMapa extends javax.swing.JFrame implements Serializable {
 
     MapasTableModel modeloTabela = new MapasTableModel();
+   
     Mapas mp;
     BufferedImage image;// recebe a imagem selecionada da pasta
     File Arquivoselecionado;
@@ -50,6 +51,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         initComponents();
         setLocationRelativeTo(null);
         totalMapas();
+      
     }
 
     public void Salvar() throws Exception {
@@ -201,7 +203,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     
 
     public void linhaSelecionada() {
-        mp = modeloTabela.getLinhaCaderneta(tabela.getSelectedRow());
+        mp = modeloTabela.getLinhaMapas(tabela.getSelectedRow());
         id = mp.getCodMapa();
         titulo.setText(mp.getTitulo());
         folha.setText(mp.getFolha());

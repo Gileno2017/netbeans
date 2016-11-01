@@ -41,7 +41,7 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
     }
 
     public void linhaSelecionadaTableMapas() {
-        mp = modeloTabelaMapas.getLinhaCaderneta(tabela.getSelectedRow());
+        mp = modeloTabelaMapas.getLinhaMapas(tabela.getSelectedRow());
         idMapa = mp.getCodMapa();
         folha.setText(mp.getFolha());
         escala.setText(mp.getEscala());
