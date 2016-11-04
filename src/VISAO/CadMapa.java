@@ -8,6 +8,8 @@ package VISAO;
 import MODELO.ManipulaBuffImage;
 import CONTROLE.MapasDao;
 import MODELO.CadernetaTableModel;
+import MODELO.EnviaArquivos;
+import static MODELO.Fotografias_.mapas;
 import MODELO.Mapas;
 import MODELO.MapasTableModel;
 import java.awt.Image;
@@ -117,6 +119,34 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             }
         }
     }
+         
+    public void salvaMapasRar() throws IOException{
+        Mapas mp = new Mapas();  
+        //seleciona o caminho onde sera capturado a pasta com os mapas
+        JFileChooser chooser = new JFileChooser("c:\\");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//captura somente pastas
+        int res = chooser.showOpenDialog(null);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            String caminho = chooser.getSelectedFile().getAbsolutePath();//caminho da pasta selecionada
+            File diretorio = new File(caminho);//cria um arquivo com os dados da pasta selecionada  
+            File arquivos[] = diretorio.listFiles();//cria uma lista de arquivos que foram selecionados
+
+//            for (int i = 0; i < arquivos.length; i++) {
+//                System.out.println(arquivos[i].toString());
+//            }
+          
+          String nome = folha.getText();
+          String extensao = ".rar";
+          String local = "";
+          File saida = new File(local+nome+extensao );
+
+            EnviaArquivos zipe = new EnviaArquivos();
+            zipe.zip(arquivos, saida);//passa a lista de arquivo por parametro e retorna o caminho onde sera salvo o arquivo rar.
+
+        }
+    }
+     
+    
 
     public void removerMapas() throws Exception {
         MapasDao mapasDao = new MapasDao();
@@ -141,7 +171,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             String path = Arquivoselecionado.getAbsolutePath();
             imagemMapa.setIcon(redimencionaImagem(path));
         } else if (resultado == JFileChooser.CANCEL_OPTION) {
-            JOptionPane.showMessageDialog(null, "Arquivo nao selecionado");
+            JOptionPane.showMessageDialog(null, "Arquivo não selecionado");
         }
     }
 
@@ -643,6 +673,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         try {
             if (id == null) {
                 try {
+                    salvaMapasRar();
                     Salvar();
 
                 } catch (Exception ex) {
