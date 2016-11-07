@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
  */
 
 public class CadernetaDao {
+  
     public EntityManager getEM(){
      EntityManagerFactory factory = Persistence.createEntityManagerFactory("ArqMapasPU");
         

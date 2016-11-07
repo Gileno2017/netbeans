@@ -1,4 +1,3 @@
-
 package VISAO;
 
 import CONTROLE.FotografiaDao;
@@ -9,9 +8,14 @@ import MODELO.MapasTableModel;
 import MODELO.FotografiasTableModel;
 import MODELO.ValidaCamposComNumeros;
 import java.io.Serializable;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 /**
  *
@@ -27,6 +31,7 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
     Long idMapa, id;
     Long idFotografia;
     ValidaCamposComNumeros validacampos;
+
     /**
      * Creates new form CadFotografias
      */
@@ -46,7 +51,7 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         folha.setText(mp.getFolha());
         escala.setText(mp.getEscala());
         folha.setEditable(false);
-        escala.setEditable(false);      
+        escala.setEditable(false);
     }
 
     public void linhaSelecionadaTableFotografias() {
@@ -63,7 +68,7 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         caixaLocalização.setText(String.valueOf(fotos.getLocalArmazenado()));
         folha.setEditable(false);
         escala.setEditable(false);
-     }
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -76,9 +81,9 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         tabela = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         folha = new javax.swing.JTextField();
-        numeroInicial = new MODELO.ValidaCamposComNumeros(7);
-        orgaoExecutor = new MODELO.ValidaCamposComLetras();
-        caixaLocalização = new MODELO.ValidaCamposComNumeros(2);
+        numeroInicial = new javax.swing.JTextField();
+        orgaoExecutor = new javax.swing.JTextField();
+        caixaLocalização = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -86,8 +91,8 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         jLabel5 = new javax.swing.JLabel();
         escala = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        totalfoto = new MODELO.ValidaCamposComNumeros(3);
-        numeroFinal = new MODELO.ValidaCamposComNumeros(7);
+        totalfoto = new javax.swing.JTextField();
+        numeroFinal = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         pesquisarMapa = new javax.swing.JButton();
@@ -430,30 +435,38 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
 
     public void salvarFotos() throws Exception {
         Fotografias fotografias = new Fotografias();
-        if(verificaCampos()){
+        JOptionPane.showMessageDialog(null, idMapa);
         Mapas mapas = new Mapas();
         mapas.setCodMapa(idMapa);
         mapas.setFolha(folha.getText());
         mapas.setEscala(escala.getText());
         fotografias.setCod_Fotografia(idFotografia);
-        fotografias.setTotaFotografias(Integer.parseInt(totalfoto.getText()));
-        fotografias.setCodInical(Integer.parseInt(numeroInicial.getText()));
-        fotografias.setCodFinal(Integer.parseInt(numeroFinal.getText()));
-        fotografias.setLocalArmazenado(Integer.parseInt(caixaLocalização.getText()));
+        fotografias.setTotaFotografias(totalfoto.getText());
+        fotografias.setCodInical(numeroInicial.getText());
+        fotografias.setCodFinal(numeroFinal.getText());
+        fotografias.setLocalArmazenado(caixaLocalização.getText());
         fotografias.setOrgaoExecutor(orgaoExecutor.getText().toUpperCase());
         fotografias.setMapas(mapas);
-        modeTabelaFotografias.salvaFotografias(fotografias);
-        modeTabelaFotografias.atualizaListadeFotos(fotos);
-        
+        //metodo responsavel por validar os campos na bean.mapas
+        ValidatorFactory validaFotos = Validation.buildDefaultValidatorFactory();
+        Validator validador = validaFotos.getValidator();
+        Set<ConstraintViolation<Fotografias>> Alerta = validador.validate(fotografias);
+        if (Alerta.size() > 0) {
+            for (ConstraintViolation< Fotografias> error : Alerta) {
+                JOptionPane.showMessageDialog(null, error.getMessage());
+            }
+        } else {
+            //Envia os dados do mapa para a tabela e salva no banco de dados
+            modeTabelaFotografias.salvaFotografias(fotografias);
+            modeTabelaFotografias.atualizaListadeFotos(fotos);
+            limpaCampos();
         }
     }
-    
-    
-    public void removerFotografias(){
+
+    public void removerFotografias() {
         FotografiaDao fotografiaDao = new FotografiaDao();
         fotografiaDao.removeFotografias(idFotografia);
         modeTabelaFotografias.removeFotografia(fotos);
-        
     }
 
     public void limpaCampos() {
@@ -465,42 +478,43 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         orgaoExecutor.setText("");
         caixaLocalização.setText("");
     }
-    public void totalMapa(){
-       MapasDao mDao = new MapasDao();
-       int total = mDao.getMapasCount();
-       totalMapas.setText(String.valueOf(total));
-    
+
+    public void totalMapa() {
+        MapasDao mDao = new MapasDao();
+        int total = mDao.getMapasCount();
+        totalMapas.setText(String.valueOf(total));
+
     }
-    
-    public boolean verificaCampos(){
-     if(folha.getText().equals("")){
-         JOptionPane.showMessageDialog(null, "Selecione um MAPA  na tabela abaixo para  salvar a fotografia");
-     return false;
-     }
-      if(numeroInicial.getText().equals("")){
-         JOptionPane.showMessageDialog(null, "O campo NUMERO INICIAL  deve ser preenchido");
-     return false;
-     }
-      if(numeroFinal.getText().equals("")){
-         JOptionPane.showMessageDialog(null, "O campo NUMERO FINAL  deve ser preenchido");
-     return false;
-     }
-     
-       if(totalfoto.getText().equals("")){
-         JOptionPane.showMessageDialog(null, "O campo TOTAL DE FOTOS deve ser preenchido");
-     return false;
-     }
-     if(orgaoExecutor.getText().equals("")){
-         JOptionPane.showMessageDialog(null, "O campo ORGÃO EXECUTOR deve ser preenchido");
-     return false;
-     }
-     if(caixaLocalização.getText().equals("")){
-         JOptionPane.showMessageDialog(null, "O campo CAIXA deve ser preenchido");
-     return false;
-     }
-     
-    return true;
-    }
+//    
+//    public boolean verificaCampos(){
+//     if(folha.getText().equals("")){
+//         JOptionPane.showMessageDialog(null, "Selecione um MAPA  na tabela abaixo para  salvar a fotografia");
+//     return false;
+//     }
+//      if(numeroInicial.getText().equals("")){
+//         JOptionPane.showMessageDialog(null, "O campo NUMERO INICIAL  deve ser preenchido");
+//     return false;
+//     }
+//      if(numeroFinal.getText().equals("")){
+//         JOptionPane.showMessageDialog(null, "O campo NUMERO FINAL  deve ser preenchido");
+//     return false;
+//     }
+//     
+//       if(totalfoto.getText().equals("")){
+//         JOptionPane.showMessageDialog(null, "O campo TOTAL DE FOTOS deve ser preenchido");
+//     return false;
+//     }
+//     if(orgaoExecutor.getText().equals("")){
+//         JOptionPane.showMessageDialog(null, "O campo ORGÃO EXECUTOR deve ser preenchido");
+//     return false;
+//     }
+//     if(caixaLocalização.getText().equals("")){
+//         JOptionPane.showMessageDialog(null, "O campo CAIXA deve ser preenchido");
+//     return false;
+//     }
+//     
+//    return true;
+//    }
 
     private void pesquisasDemapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesquisasDemapasActionPerformed
         // TODO add your handling code here:
@@ -524,7 +538,7 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
     }//GEN-LAST:event_tabelaFotografiasMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       removerFotografias();
+        removerFotografias();
         limpaCampos();
     }//GEN-LAST:event_jButton1ActionPerformed
 

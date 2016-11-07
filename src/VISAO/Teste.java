@@ -19,11 +19,11 @@ public class Teste {
         Mapas mapas = new Mapas();
         FotografiaDao fotografiasDao = new FotografiaDao();
         fot.setCod_Fotografia(401l);
-        fot.setCodFinal(14);
-        fot.setCodInical(15);
-        fot.setLocalArmazenado(14);
+        fot.setCodFinal("16");
+        fot.setCodInical("16");
+        fot.setLocalArmazenado("16");
         fot.setOrgaoExecutor("MANAUS");
-        fot.setTotaFotografias(200);
+        fot.setTotaFotografias("200");
         mapas.setCodMapa(1l);
         fot.setMapas(mapas);
         fotografiasDao.salvarFotografias(fot);

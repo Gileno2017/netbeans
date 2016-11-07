@@ -178,7 +178,7 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
         lprojeto = new javax.swing.JLabel();
         projeto = new javax.swing.JTextField();
         lnome = new javax.swing.JLabel();
-        geologo = new MODELO.ValidaCamposComNumeros();
+        geologo = new javax.swing.JTextField();
         c_custo = new javax.swing.JLabel();
         centro_custo = new javax.swing.JTextField();
         jLTipo = new javax.swing.JLabel();

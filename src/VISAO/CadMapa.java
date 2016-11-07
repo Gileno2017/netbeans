@@ -133,7 +133,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             File arquivos[] = diretorio.listFiles();//cria uma lista de arquivos que foram selecionados
             String nome = folha.getText();
             String extensao = ".rar";
-            String local = " ";
+            String local = "E:\\ ";
             File saida = new File(local + nome + extensao);
 
             EnviaArquivos zipe = new EnviaArquivos();

@@ -260,21 +260,14 @@
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Inserir somente n&#xfa;meros"/>
           </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new MODELO.ValidaCamposComNumeros(7);"/>
-          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="orgaoExecutor">
           <Properties>
             <Property name="toolTipText" type="java.lang.String" value="Inserir somente  letras e /"/>
           </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new MODELO.ValidaCamposComLetras()"/>
-          </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="caixaLocaliza&#xe7;&#xe3;o">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new MODELO.ValidaCamposComNumeros(2)"/>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="caixaLocaliza&#xe7;&#xe3;o.setToolTipText(&quot;Insergir somente n&#xfa;meros&quot;);"/>
           </AuxValues>
         </Component>
@@ -333,7 +326,6 @@
         </Component>
         <Component class="javax.swing.JTextField" name="totalfoto">
           <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new MODELO.ValidaCamposComNumeros(3)"/>
             <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="totalfoto.setToolTipText(&quot;Inserir somente n&#xfa;meros&quot;);"/>
           </AuxValues>
         </Component>
@@ -346,9 +338,6 @@
               <Connection code="&quot;Inserir somente n&#xfa;meros&quot;" type="code"/>
             </Property>
           </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_CreateCodeCustom" type="java.lang.String" value="new MODELO.ValidaCamposComNumeros(7)"/>
-          </AuxValues>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel7">
           <Properties>
