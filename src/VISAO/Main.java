@@ -11,47 +11,30 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 
 /**
- * 
+ *
  * @author gileno.macedo
  */
 public class Main {
- 
+
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws JRException, SQLException {
         new Main().abrirRelatorioMapas();
     }
- 
+
     public void abrirRelatorioMapas() throws JRException, SQLException {
- 
-        /*
-         * Obtendo o arquivo do relatório.
-         * Note que estamos utilizando um InputStream para obter o arquivo que
-         * está dentro do nosso projeto. Fazendo isso, não teremos problema
-         * quando nosso projeto for empacotado em um .jar.
-         *
-         * Note que o caminho do .jasper inicia com /, ou seja, a raiz da
-         * localização das classes compiladas do nosso projeto
-         * (o pacote default).
-         *
-         * Utilize a aba Files (canto superior esquerdo) e veja que os arquivos
-         * .jasper e .jrxml são copiados para o diretório /build/classes
-         * e por consequencia para o .jar que for criado.
-         *
-         * Se não os estiver vendo, mande dar um Clean and Build no projeto
-         * (botão direito no nó raiz do projeto, Clean and Build (Limpar e Construir)
-         *
-         */
-        InputStream inputStream = getClass().getResourceAsStream("/Relatorios/Mapas.jasper");
- 
+
+        InputStream inputStream = getClass().getResourceAsStream("/Relatorios/MapasPorFolha.jasper");
         // mapa de parâmetros do relatório (ainda vamos aprender a usar)
         Map parametros = new HashMap();
- 
+        String texto = JOptionPane.showInputDialog("Informe Iniciais da folha para consulta, seguido de %").toUpperCase();
+        parametros.put("ConsultaPorFolha", texto);
         ReportUtils.openReport("Relatorio de Mapas ", inputStream, parametros,
-                JasperReportConnectionFactory.getPostgresConnection() ); 
-    } 
+                JasperReportConnectionFactory.getPostgresConnection());
+    }
 }
