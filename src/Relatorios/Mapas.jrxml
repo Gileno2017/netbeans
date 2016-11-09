@@ -26,7 +26,7 @@
 				<textElement textAlignment="Justified">
 					<font fontName="Arial" size="24" isItalic="true"/>
 				</textElement>
-				<text><![CDATA[Realtório de Mapas da Litoteca]]></text>
+				<text><![CDATA[Relatório de Mapas da Litoteca]]></text>
 			</staticText>
 		</band>
 	</title>
