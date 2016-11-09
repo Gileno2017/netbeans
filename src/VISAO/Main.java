@@ -29,11 +29,11 @@ public class Main {
 
     public void abrirRelatorioMapas() throws JRException, SQLException {
 
-        InputStream inputStream = getClass().getResourceAsStream("/Relatorios/MapasPorFolha.jasper");
+        InputStream inputStream = getClass().getResourceAsStream("/Relatorios/MapasPorTitulo.jasper");
         // mapa de parâmetros do relatório (ainda vamos aprender a usar)
         Map parametros = new HashMap();
-        String texto = JOptionPane.showInputDialog("Informe Iniciais da folha para consulta, seguido de %").toUpperCase();
-        parametros.put("ConsultaPorFolha", texto);
+        String texto = JOptionPane.showInputDialog("Informe Iniciais da folha para consulta").toUpperCase();
+        parametros.put("ConsultaPorTitulo",texto+"%");
         ReportUtils.openReport("Relatorio de Mapas ", inputStream, parametros,
                 JasperReportConnectionFactory.getPostgresConnection());
     }

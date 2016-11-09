@@ -118,7 +118,6 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
                 //Envia os dados do mapa para a tabela e salva no banco de dados
                 modeloTabela.adicionaMapa(mapas);
                 modeloTabela.atualizaListadeMapa(mp);
-
                 limpaCampos();
                 totalMapas();
 
@@ -226,7 +225,6 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         MapasDao mapasDao = new MapasDao();
         int total = mapasDao.getMapasCount();
         totalMapas.setText(String.valueOf(total));
-
     }
 
     public void linhaSelecionada() {
@@ -243,11 +241,9 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         MapasDao mDao = new MapasDao();
         Mapas mapas = mDao.consultaMapasId(id);
         exibiImagemLabel(mapas.getImagem(), imagemMapa);
-
     }
 
     public boolean verificaCampos() {
-
         if (imagemMapa.getIcon() == null) {
             JOptionPane.showMessageDialog(null, "Uma IMAGEM  deve ser selecionada");
             return false;
@@ -255,20 +251,40 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             return true;
         }
     }
-      public void abrirRelatorioMapasPorFolha() throws JRException, SQLException {
+
+    public void abrirRelatorioMapasPorGaveta() throws JRException, SQLException {
+        //Consulta de mapas por folha
+        InputStream inputStream = getClass().getResourceAsStream("/Relatorios/MapasPorGaveta.jasper");
+        Map parametros = new HashMap();
+        String texto = JOptionPane.showInputDialog("Informe Iniciais da folha para consulta, seguido de %").toUpperCase();
+        parametros.put("ConsultaPorGaveta", "0" + texto + "%");
+        ReportUtils.openReport("Relatorio de Mapas ", inputStream, parametros,
+                JasperReportConnectionFactory.getPostgresConnection());
+    }
+
+    public void abrirRelatorioMapasPorFolha() throws JRException, SQLException {
         //Consulta de mapas por folha
         InputStream inputStream = getClass().getResourceAsStream("/Relatorios/MapasPorFolha.jasper");
         Map parametros = new HashMap();
-         String texto = JOptionPane.showInputDialog("Informe Iniciais da folha para consulta, seguido de %").toUpperCase();
-        parametros.put("ConsultaPorFolha", texto);
+        String texto = JOptionPane.showInputDialog("Informe Iniciais da folha para consulta").toUpperCase();
+        parametros.put("ConsultaPorFolha", texto + "%");
+        ReportUtils.openReport("Relatorio de Mapas ", inputStream, parametros,
+                JasperReportConnectionFactory.getPostgresConnection());
+    }
+
+    public void abriRelatorioMapasPorTitulo() throws JRException, SQLException {
+        InputStream inputStream = getClass().getResourceAsStream("/Relatorios/MapasPorTitulo.jasper");
+        Map parametros = new HashMap();
+        String texto = JOptionPane.showInputDialog("Informe Iniciais da folha para consulta").toUpperCase();
+        parametros.put("ConsultaPorTitulo", texto + "%");
         ReportUtils.openReport("Relatorio de Mapas ", inputStream, parametros,
                 JasperReportConnectionFactory.getPostgresConnection());
     }
 
     public void abrirRelatorioMapas() throws JRException, SQLException {
-         //Consulta todos os Mapas
-        InputStream inputStream = getClass().getResourceAsStream("/Relatorios/Mapas.jasper");       
-        Map parametros = new HashMap();        
+        //Consulta todos os Mapas
+        InputStream inputStream = getClass().getResourceAsStream("/Relatorios/Mapas.jasper");
+        Map parametros = new HashMap();
         ReportUtils.openReport("Relatorio de Mapas ", inputStream, parametros,
                 JasperReportConnectionFactory.getPostgresConnection());
     }
@@ -317,6 +333,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         jMenu3 = new javax.swing.JMenu();
         jM_ListagemMapas = new javax.swing.JMenuItem();
         jM_ListagemPorFolha = new javax.swing.JMenuItem();
+        jM_ConsultaPorGaveta = new javax.swing.JMenuItem();
+        jM_ListagemPorTitulo = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -691,6 +709,24 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         });
         jMenu3.add(jM_ListagemPorFolha);
 
+        jM_ConsultaPorGaveta.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ConsultaPorGaveta.setText("Mapas Por Gaveta");
+        jM_ConsultaPorGaveta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_ConsultaPorGavetaActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jM_ConsultaPorGaveta);
+
+        jM_ListagemPorTitulo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ListagemPorTitulo.setText("Mapas Por Título");
+        jM_ListagemPorTitulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_ListagemPorTituloActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jM_ListagemPorTitulo);
+
         jMenuBar1.add(jMenu3);
 
         jMenu4.setText("Ajuda");
@@ -715,7 +751,6 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     private void carregarImagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carregarImagemActionPerformed
         try {
             carregaImagem();
-
         } catch (IOException ex) {
             Logger.getLogger(CadMapa.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -724,7 +759,6 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
 
     private void EnviaImagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EnviaImagemActionPerformed
         // envia um bufferedImage por paramentro para o ZoomImage
-
         if (imagemMapa.getIcon() == null) {
             JOptionPane.showMessageDialog(null, "Selecione o Mapa Clicando na Tabela Abaixo !");
         } else {
@@ -793,6 +827,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             JOptionPane.showMessageDialog(null, "Informe a Folha para Efetuar a Pesquisa !");
         } else {
             pesquisaPorFoha();
+           totalMapas();
+
             pesquisa.setText("");
         }
     }//GEN-LAST:event_pesquisarMapasActionPerformed
@@ -807,15 +843,13 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_novoMapaActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jM_ListagemMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemMapasActionPerformed
         try {
             abrirRelatorioMapas();
-        } catch (JRException ex) {
-            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (JRException | SQLException ex) {
             Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jM_ListagemMapasActionPerformed
@@ -823,12 +857,26 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     private void jM_ListagemPorFolhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemPorFolhaActionPerformed
         try {
             abrirRelatorioMapasPorFolha();
-        } catch (JRException ex) {
-            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
+        } catch (JRException | SQLException ex) {
             Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jM_ListagemPorFolhaActionPerformed
+
+    private void jM_ConsultaPorGavetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ConsultaPorGavetaActionPerformed
+        try {
+            abrirRelatorioMapasPorGaveta();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ConsultaPorGavetaActionPerformed
+
+    private void jM_ListagemPorTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemPorTituloActionPerformed
+        try {
+            abriRelatorioMapasPorTitulo();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ListagemPorTituloActionPerformed
 
     /**
      * @param args the command line arguments
@@ -896,8 +944,10 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenuItem jM_ConsultaPorGaveta;
     private javax.swing.JMenuItem jM_ListagemMapas;
     private javax.swing.JMenuItem jM_ListagemPorFolha;
+    private javax.swing.JMenuItem jM_ListagemPorTitulo;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
