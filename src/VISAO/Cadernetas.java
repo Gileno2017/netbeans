@@ -7,20 +7,25 @@ package VISAO;
 
 import MODELO.CadernetaTableModel;
 import CONTROLE.CadernetaDao;
+import CONTROLE.JasperReportConnectionFactory;
 import MODELO.Caderneta;
+import MODELO.ReportUtils;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  *
  * @author gileno.macedo
  */
-public class Cadernetas extends javax.swing.JFrame implements Serializable{
+public class Cadernetas extends javax.swing.JFrame implements Serializable {
 
- 
-     
     CadernetaTableModel modeloTabela = new CadernetaTableModel();
     Long id;
     Caderneta cad;
@@ -74,14 +79,14 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
         cc.setQtd(Integer.parseInt(quantidade.getValue().toString().toUpperCase()));
         cc.setAno(String.valueOf(ano.getValue()).toUpperCase());
         cc.setCentroCusto(centro_custo.getText().toUpperCase());
-        cc.setTipo((String) tipo.getSelectedItem());    
+        cc.setTipo((String) tipo.getSelectedItem());
         modeloTabela.AdcionarCaderneta(cc);
-       JOptionPane.showMessageDialog(null, "Dados Cadastrado com Sucesso !!");
-       totalCadernetas();        
+        JOptionPane.showMessageDialog(null, "Dados Cadastrado com Sucesso !!");
+        totalCadernetas();
     }
 
     public void alterarDados() throws Exception {
-        Caderneta cc = new Caderneta();         
+        Caderneta cc = new Caderneta();
         cc.setCod_Caderneta(id);
         cc.setProjeto(projeto.getText().toUpperCase());
         cc.setGeologo(geologo.getText().toUpperCase());
@@ -89,12 +94,12 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
         cc.setQtd(Integer.parseInt(quantidade.getValue().toString().toUpperCase()));
         cc.setAno(String.valueOf(ano.getValue()).toUpperCase());
         cc.setCentroCusto(centro_custo.getText().toUpperCase());
-        cc.setTipo((String) tipo.getSelectedItem());   
+        cc.setTipo((String) tipo.getSelectedItem());
         limpaCampos();
         modeloTabela.RemoveCaderneta(cad);
         modeloTabela.AdcionarCaderneta(cc);
         tamanhoColunas();
-        JOptionPane.showMessageDialog(null, "Dados Alterado com Sucesso !!");      
+        JOptionPane.showMessageDialog(null, "Dados Alterado com Sucesso !!");
     }
 
     public void removeCaderneta() throws Exception {
@@ -125,7 +130,7 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
         Salvar.setVisible(false);
         Alterar.setVisible(true);
         totalCadernetas();
-     
+
     }
 
     public void PesquisaCadernetaPorId() {
@@ -157,18 +162,17 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
         tipo.setVisible(false);
         quantidade.setVisible(false);
         ano.setVisible(false);
-
     }
-    
-    public boolean verificaCampos(){
-            if(!projeto.getText().equals("") &&!geologo.getText().equals("")
-                    &&!prateleira.getValue().equals("")&&!centro_custo.getText().equals("")
-                    &&!tipo.getSelectedItem().equals("")&&!quantidade.getValue().equals("")){
-                   return true;
-                 }
-                  JOptionPane.showMessageDialog(null, "Preencha Todos os Campos");
-                  return false;
-         }
+
+    public boolean verificaCampos() {
+        if (!projeto.getText().equals("") && !geologo.getText().equals("")
+                && !prateleira.getValue().equals("") && !centro_custo.getText().equals("")
+                && !tipo.getSelectedItem().equals("") && !quantidade.getValue().equals("")) {
+            return true;
+        }
+        JOptionPane.showMessageDialog(null, "Preencha Todos os Campos");
+        return false;
+    }
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -203,6 +207,12 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
         Alterar = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
+        jM_relatorio_cadernetas = new javax.swing.JMenuItem();
+        jM_relatorio_geologo = new javax.swing.JMenuItem();
+        jM_relatorio_projeto = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadernetas de Campo");
@@ -451,6 +461,42 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
             }
         });
 
+        jMenu1.setText("Cadastros");
+        jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Relatórios");
+
+        jM_relatorio_cadernetas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_relatorio_cadernetas.setText("Cadernetas");
+        jM_relatorio_cadernetas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_relatorio_cadernetasActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jM_relatorio_cadernetas);
+
+        jM_relatorio_geologo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_relatorio_geologo.setText("Cadernetas Por Geólogo");
+        jM_relatorio_geologo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_relatorio_geologoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jM_relatorio_geologo);
+
+        jM_relatorio_projeto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_relatorio_projeto.setText("Cadernetas Por Projeto");
+        jM_relatorio_projeto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_relatorio_projetoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jM_relatorio_projeto);
+
+        jMenuBar1.add(jMenu2);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -492,7 +538,7 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(17, 17, 17)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 274, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(Alterar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -516,22 +562,22 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
     }//GEN-LAST:event_projetoActionPerformed
 
     private void jB_PesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_PesquisarActionPerformed
-         ConsultaGeologoporNome();
-         tamanhoColunas();
-         Alterar.setVisible(true);
-         Salvar.setVisible(false);
-        
+        ConsultaGeologoporNome();
+        tamanhoColunas();
+        Alterar.setVisible(true);
+        Salvar.setVisible(false);
+
     }//GEN-LAST:event_jB_PesquisarActionPerformed
 
     private void SalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalvarActionPerformed
-       if(verificaCampos()){
-           try {
-               salvarCadernetas();
-           } catch (Exception ex) {
-               Logger.getLogger(Cadernetas.class.getName()).log(Level.SEVERE, null, ex);
-           }
+        if (verificaCampos()) {
+            try {
+                salvarCadernetas();
+            } catch (Exception ex) {
+                Logger.getLogger(Cadernetas.class.getName()).log(Level.SEVERE, null, ex);
+            }
             limpaCampos();
-       }
+        }
     }//GEN-LAST:event_SalvarActionPerformed
 
     private void geologoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_geologoActionPerformed
@@ -554,11 +600,8 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
                 } catch (Exception ex) {
                     Logger.getLogger(Cadernetas.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
             }
-
         }
-
     }//GEN-LAST:event_DeletarActionPerformed
 
     private void AlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AlterarActionPerformed
@@ -572,9 +615,41 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
                 Logger.getLogger(Cadernetas.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
     }//GEN-LAST:event_AlterarActionPerformed
 
+    private void emitirRelatorios() throws JRException, SQLException {
+
+        //Consulta todos os Mapas
+        InputStream inputStream = getClass().getResourceAsStream("/Relatorios/Cadernetas.jasper");
+        Map parametros = new HashMap();
+        ReportUtils.openReport("Relatorio de Cadernetas ", inputStream, parametros,
+                JasperReportConnectionFactory.getPostgresConnection());
+
+    }
+
+    private void emitirRelatoriosPorGeologo() throws JRException, SQLException {
+
+        //Consulta todos os Geologos cadastrados
+        InputStream inputStream = getClass().getResourceAsStream("/Relatorios/CadernetasPorGeologo.jasper");
+        Map parametros = new HashMap();
+        String texto = JOptionPane.showInputDialog("Informe Iniciais da folha para consulta").toUpperCase();
+        parametros.put("ConsultaCaderdenasPorGeologo", texto + "%");
+        ReportUtils.openReport("Relatorio de Cadernetas ", inputStream, parametros,
+                JasperReportConnectionFactory.getPostgresConnection());
+
+    }
+
+    private void emitirRelatoriosPorProjeto() throws JRException, SQLException {
+
+        //Consulta todos os Mapas
+        InputStream inputStream = getClass().getResourceAsStream("/Relatorios/CadernetasPorProjeto.jasper");
+        Map parametros = new HashMap();
+        String texto = JOptionPane.showInputDialog("Informe Iniciais da folha para consulta").toUpperCase();
+        parametros.put("ConsultaCaderdenasPorProjeto", texto + "%");
+        ReportUtils.openReport("Relatorio de Cadernetas ", inputStream, parametros,
+                JasperReportConnectionFactory.getPostgresConnection());
+
+    }
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         limpaCampos();
         Alterar.setVisible(false);
@@ -583,9 +658,31 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         setVisible(false);
-
-
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jM_relatorio_cadernetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_relatorio_cadernetasActionPerformed
+        try {
+            emitirRelatorios();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(Cadernetas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_relatorio_cadernetasActionPerformed
+
+    private void jM_relatorio_geologoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_relatorio_geologoActionPerformed
+        try {
+            emitirRelatoriosPorGeologo();        // TODO add your handling code here:
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(Cadernetas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_relatorio_geologoActionPerformed
+
+    private void jM_relatorio_projetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_relatorio_projetoActionPerformed
+        try {
+            emitirRelatoriosPorProjeto();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(Cadernetas.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_relatorio_projetoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -645,6 +742,12 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable{
     private javax.swing.JLabel jL_totalCadenetas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JMenuItem jM_relatorio_cadernetas;
+    private javax.swing.JMenuItem jM_relatorio_geologo;
+    private javax.swing.JMenuItem jM_relatorio_projeto;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;

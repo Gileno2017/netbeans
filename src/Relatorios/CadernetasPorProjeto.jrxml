@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c3c0c625-da7b-4fa0-b4c8-973f9807c025">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ConsultaCaderdenasPorProjeto" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT * FROM caderneta
+WHERE projeto LIKE $P{ConsultaCaderdenasPorProjeto}
+ORDER BY projeto;]]>
+	</queryString>
+	<field name="cod_caderneta" class="java.lang.Integer"/>
+	<field name="ano" class="java.lang.String"/>
+	<field name="centrocusto" class="java.lang.String"/>
+	<field name="geologo" class="java.lang.String"/>
+	<field name="prateleira" class="java.lang.Integer"/>
+	<field name="projeto" class="java.lang.String"/>
+	<field name="qtd" class="java.lang.Integer"/>
+	<field name="tipo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="71" splitType="Stretch">
+			<staticText>
+				<reportElement x="153" y="21" width="281" height="40" uuid="64e45832-93fe-44e8-80d3-5fe861cbea7d"/>
+				<textElement>
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Relatórios de Cadernetas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="63" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="10" width="228" height="25" uuid="59b3e5b2-6d17-4cab-a2db-7ef9b8a0370a"/>
+				<textElement>
+					<font size="14" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Lista De Cadernetas, PROJETO :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="228" y="10" width="303" height="25" uuid="e212e7d0-3a64-40bf-88c0-b2fe7a89579a"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ConsultaCaderdenasPorProjeto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="48" splitType="Stretch">
+			<staticText>
+				<reportElement x="355" y="0" width="100" height="20" uuid="0e492548-cfa5-4700-889d-4265344e2c26"/>
+				<textElement textAlignment="Center">
+					<font size="14" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[PRATELEIRA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2" width="100" height="20" uuid="a74a4482-dc68-4615-aa4c-f451822e204c"/>
+				<textElement textAlignment="Center">
+					<font size="14" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[PROJETO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="239" y="2" width="100" height="20" uuid="efa2c9ef-33d9-47f5-890f-6e075a82fc36"/>
+				<textElement textAlignment="Center">
+					<font size="14" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[TIPO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="474" y="0" width="57" height="20" uuid="2f7dfd96-77d9-4a92-be30-35093e85cbd6"/>
+				<textElement textAlignment="Center">
+					<font size="14" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[QTD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="116" y="0" width="100" height="20" uuid="12aab759-a066-455f-b14c-6365f922dccb"/>
+				<textElement textAlignment="Center">
+					<font size="14" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[GEÓLOGO	]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="116" y="0" width="100" height="20" uuid="591b426a-1694-486f-bab8-6d68dd1ee153"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{geologo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="355" y="0" width="100" height="20" uuid="05db6c32-9e8c-406c-977c-bc1021bcaab5"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{prateleira}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="eaa7aa04-9a5a-42a4-a403-a0d117e5745f"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{projeto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="474" y="0" width="57" height="20" uuid="01f10682-bb66-4703-8016-0cf1c81b9f9b"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{qtd}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="239" y="0" width="100" height="20" uuid="8b36b815-1ad0-4293-be14-708318d00732"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="34" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement x="510" y="0" width="45" height="20" uuid="bef1a8a3-229f-4db3-b476-c8b87985f01e"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="455" y="0" width="45" height="20" uuid="ac919d91-c0e4-41ee-9d28-cd3df85c962f"/>
+				<text><![CDATA[Página]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="16" y="17" width="153" height="20" uuid="0581baf4-4f93-44c0-add2-1f2ca44b270a"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
