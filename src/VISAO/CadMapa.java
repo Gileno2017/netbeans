@@ -10,13 +10,12 @@ import MODELO.ManipulaBuffImage;
 import CONTROLE.MapasDao;
 import MODELO.CadernetaTableModel;
 import MODELO.EnviaArquivos;
-import static MODELO.Fotografias_.mapas;
 import MODELO.Mapas;
 import MODELO.MapasTableModel;
 import MODELO.ReportUtils;
+import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -24,14 +23,21 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -46,7 +52,6 @@ import net.sf.jasperreports.engine.JRException;
 public class CadMapa extends javax.swing.JFrame implements Serializable {
 
     MapasTableModel modeloTabela = new MapasTableModel();
-
     Mapas mp;
     BufferedImage image;// recebe a imagem selecionada da pasta
     File Arquivoselecionado;
@@ -136,12 +141,17 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             String caminho = chooser.getSelectedFile().getAbsolutePath();//caminho da pasta selecionada
             File diretorio = new File(caminho);//cria um arquivo com os dados da pasta selecionada  
             File arquivos[] = diretorio.listFiles();//cria uma lista de arquivos que foram selecionados
-            String nome = folha.getText();
+
+            String Titulo = titulo.getText().toUpperCase();
+            String Folha = folha.getText().toUpperCase();
+            String nome = (Titulo + "_" + Folha);
+            //JOptionPane.showMessageDialog(null, nome);MA
             String extensao = ".rar";
-            String local = "E:\\ ";
-            File saida = new File(local + nome + extensao);
+            String local = "E:\\NovoMapa";
+            File saida = new File(local, nome + extensao);
 
             EnviaArquivos zipe = new EnviaArquivos();
+            // splashRar();
             zipe.zip(arquivos, saida);//passa a lista de arquivo por parametro e retorna o caminho onde sera salvo o arquivo rar.
 
         }
@@ -441,7 +451,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         jP_camposLayout.setVerticalGroup(
             jP_camposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jP_camposLayout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(0, 0, 0)
                 .addGroup(jP_camposLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(titulo, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
@@ -648,22 +658,16 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         jP_MapasLayout.setVerticalGroup(
             jP_MapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jP_MapasLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jP_MapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jP_MapasLayout.createSequentialGroup()
-                        .addGap(40, 40, 40)
                         .addComponent(jP_campos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jP_MapasLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jP_MapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jP_MapasLayout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jP_MapasLayout.createSequentialGroup()
-                                .addComponent(jLabel9)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(imagemMapa, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(6, 6, 6)))))
+                        .addGap(23, 23, 23)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(imagemMapa, javax.swing.GroupLayout.PREFERRED_SIZE, 318, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 420, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -735,9 +739,14 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+
     private void carregarImagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carregarImagemActionPerformed
         try {
+            Cursor cursorAguandando = new Cursor(Cursor.WAIT_CURSOR);
+            setCursor(cursorAguandando);
             carregaImagem();
+            Cursor cursorNormal = new Cursor(Cursor.DEFAULT_CURSOR);
+            setCursor(cursorNormal);
         } catch (IOException ex) {
             Logger.getLogger(CadMapa.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -760,8 +769,12 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         try {
             if (id == null) {
                 try {
+                    Cursor cursorAguandando = new Cursor(Cursor.WAIT_CURSOR);
+                    setCursor(cursorAguandando);
                     salvaMapasRar();
                     Salvar();
+                    Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
+                    setCursor(normalCursor);
 
                 } catch (Exception ex) {
                     Logger.getLogger(CadMapa.class
@@ -789,7 +802,6 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         linhaSelecionada();
     }//GEN-LAST:event_tabelaMouseClicked
 
-
     private void DeletarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DeletarActionPerformed
         if (id == null) {
             JOptionPane.showMessageDialog(null, "Selecione  os Dados Que Deseja Excluir Clicando na Linha da Tabela");
@@ -799,7 +811,6 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
                 try {
                     removerMapas();
                     limpaCampos();
-
                 } catch (Exception ex) {
                     Logger.getLogger(CadMapa.class
                             .getName()).log(Level.SEVERE, null, ex);
@@ -813,18 +824,19 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             JOptionPane.showMessageDialog(null, "Informe a Folha para Efetuar a Pesquisa !");
         } else {
             pesquisaPorFoha();
-           totalMapas();
+            totalMapas();
 
             pesquisa.setText("");
         }
     }//GEN-LAST:event_pesquisarMapasActionPerformed
 
+
     private void pesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesquisaActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_pesquisaActionPerformed
 
     private void novoMapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_novoMapaActionPerformed
-        limpaCampos();
+
 
     }//GEN-LAST:event_novoMapaActionPerformed
 

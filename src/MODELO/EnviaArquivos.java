@@ -4,20 +4,15 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Enumeration;
 import java.util.Stack;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipException;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
-import javax.swing.JOptionPane;
 
 public class EnviaArquivos {
 
 	public void zip(File[] files, File outputFile) throws IOException {
-                      JOptionPane.showMessageDialog(null, files);
+                    //  JOptionPane.showMessageDialog(null,files);
+                     
 		if (files != null && files.length > 0) {
                      
 			ZipOutputStream out = new ZipOutputStream(
