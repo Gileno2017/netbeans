@@ -5,14 +5,14 @@
     <class>MODELO.Caderneta</class>
     <class>MODELO.Fotografias</class>
     <class>MODELO.Mapas</class>
+    <class>MODELO.ImagemMapas</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/ArqMap"/>
       <property name="javax.persistence.jdbc.user" value="postgres"/>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
       <property name="javax.persistence.jdbc.password" value="Djlennon2016"/>
-      <property name="javax.persistence.schema-generation.database.action" value="create"/>   
+      <property name="javax.persistence.schema-generation.database.action" value="create"/>
       <property name="javax.persistence.validation.group.pre-persist" value="javax.validation.groups.Default"/>
-
     </properties>
   </persistence-unit>
 </persistence>

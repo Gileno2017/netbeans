@@ -6,19 +6,20 @@
 package VISAO;
 
 import java.io.Serializable;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  *
  * @author gileno.macedo
  */
-public class TelaPrincipal extends javax.swing.JFrame implements Serializable{
+public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
 
-   
     public TelaPrincipal() {
         initComponents();
     }
-    
-           
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -40,6 +41,11 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable{
         jM_pesquisarMapas = new javax.swing.JMenuItem();
         jM_pesquisarfotografias = new javax.swing.JMenuItem();
         jM_pesquisarCaderneta = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jM_ListagemMapas = new javax.swing.JMenuItem();
+        jM_ListagemPorFolha = new javax.swing.JMenuItem();
+        jM_ConsultaPorGaveta = new javax.swing.JMenuItem();
+        jM_ListagemPorTitulo = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,6 +83,11 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable{
 
         jM_cadastrarfotografias.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
         jM_cadastrarfotografias.setText("Fotografias");
+        jM_cadastrarfotografias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_cadastrarfotografiasActionPerformed(evt);
+            }
+        });
         jMenu2.add(jM_cadastrarfotografias);
 
         jM_cadastrarCadernetas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK));
@@ -121,6 +132,46 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable{
 
         jMenuBar1.add(jMenu3);
 
+        jMenu4.setText("Relatórios");
+
+        jM_ListagemMapas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ListagemMapas.setText("Mapas");
+        jM_ListagemMapas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_ListagemMapasActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jM_ListagemMapas);
+
+        jM_ListagemPorFolha.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ListagemPorFolha.setText("Mapas Por Folha");
+        jM_ListagemPorFolha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_ListagemPorFolhaActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jM_ListagemPorFolha);
+
+        jM_ConsultaPorGaveta.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ConsultaPorGaveta.setText("Mapas Por Gaveta");
+        jM_ConsultaPorGaveta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_ConsultaPorGavetaActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jM_ConsultaPorGaveta);
+
+        jM_ListagemPorTitulo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ListagemPorTitulo.setText("Mapas Por Título");
+        jM_ListagemPorTitulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_ListagemPorTituloActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jM_ListagemPorTitulo);
+
+        jMenuBar1.add(jMenu4);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -144,25 +195,70 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable{
     }// </editor-fold>//GEN-END:initComponents
 
     private void jM_cadastrarMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastrarMapasActionPerformed
-     //   new CadMap().setVisible(true);
+       CadMapa mapas = new CadMapa();
+        mapas.setVisible(true);
     }//GEN-LAST:event_jM_cadastrarMapasActionPerformed
 
     private void jM_pesquisarMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarMapasActionPerformed
-  
+      CadMapa mapas = new CadMapa();
+        mapas.setVisible(true);
     }//GEN-LAST:event_jM_pesquisarMapasActionPerformed
 
     private void jM_pesquisarCadernetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarCadernetaActionPerformed
-        // TODO add your handling code here:
+       Cadernetas cadernetas = new Cadernetas();
+        cadernetas.setVisible(true);
     }//GEN-LAST:event_jM_pesquisarCadernetaActionPerformed
 
     private void jM_pesquisarfotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarfotografiasActionPerformed
-        // TODO add your handling code here:
+       CadFotografiasAerea fotografias = new CadFotografiasAerea();
+        fotografias.setVisible(true);
     }//GEN-LAST:event_jM_pesquisarfotografiasActionPerformed
 
     private void jM_cadastrarCadernetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastrarCadernetasActionPerformed
-        Cadernetas cad = new Cadernetas();
-        cad.setVisible(true);
+       Cadernetas cadernetas = new Cadernetas();
+        cadernetas.setVisible(true);
     }//GEN-LAST:event_jM_cadastrarCadernetasActionPerformed
+
+    private void jM_cadastrarfotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastrarfotografiasActionPerformed
+       CadFotografiasAerea fotografias = new CadFotografiasAerea();
+        fotografias.setVisible(true);
+    }//GEN-LAST:event_jM_cadastrarfotografiasActionPerformed
+
+    private void jM_ListagemMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemMapasActionPerformed
+        try {
+            CadMapa mapas = new CadMapa();
+            mapas.abrirRelatorioMapas();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ListagemMapasActionPerformed
+
+    private void jM_ListagemPorFolhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemPorFolhaActionPerformed
+        try {
+            CadMapa mapas = new CadMapa();
+           mapas.abrirRelatorioMapasPorFolha();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ListagemPorFolhaActionPerformed
+
+    private void jM_ConsultaPorGavetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ConsultaPorGavetaActionPerformed
+        try {
+            CadMapa mapas = new CadMapa();
+            mapas.abrirRelatorioMapasPorGaveta();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ConsultaPorGavetaActionPerformed
+
+    private void jM_ListagemPorTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemPorTituloActionPerformed
+        try {
+            CadMapa mps = new CadMapa();
+            mps.abriRelatorioMapasPorTitulo();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ListagemPorTituloActionPerformed
 
     /**
      * @param args the command line arguments
@@ -201,6 +297,10 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable{
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JMenuItem jM_ConsultaPorGaveta;
+    private javax.swing.JMenuItem jM_ListagemMapas;
+    private javax.swing.JMenuItem jM_ListagemPorFolha;
+    private javax.swing.JMenuItem jM_ListagemPorTitulo;
     private javax.swing.JMenuItem jM_cadastrarCadernetas;
     private javax.swing.JMenuItem jM_cadastrarMapas;
     private javax.swing.JMenuItem jM_cadastrarfotografias;
@@ -209,6 +309,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable{
     private javax.swing.JMenuItem jM_pesquisarfotografias;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables

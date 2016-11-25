@@ -84,6 +84,10 @@ public class Mapas implements Serializable {
     @NotNull(message = "O campo QUANTIDADE  não pode ser nulo")
     @NotBlank(message = "O campo QUANTIDADE deve ser preenchido")
     private String quantidade;
+    
+    @NotNull(message = "O campo caminho  não pode ser nulo")
+    @NotBlank(message = "O campo caminho deve ser preenchido")
+    private String caminho;
 
     public List<Fotografias> getListadeFotografias() {
         return listadeFotografias;
@@ -195,6 +199,14 @@ public class Mapas implements Serializable {
 
     public void setQuantidade(String quantidade) {
         this.quantidade = quantidade;
+    }
+
+    public String getCaminho() {
+        return caminho;
+    }
+
+    public void setCaminho(String caminho) {
+        this.caminho = caminho;
     }
 
 }

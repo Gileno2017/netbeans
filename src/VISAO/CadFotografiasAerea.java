@@ -39,6 +39,7 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         initComponents();
         setLocationRelativeTo(null);
         totalMapa();
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public void pesquisaPorFoha() {

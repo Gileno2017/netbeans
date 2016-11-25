@@ -14,6 +14,7 @@ import MODELO.Mapas;
 import MODELO.MapasTableModel;
 import MODELO.ReportUtils;
 import java.awt.Cursor;
+import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -23,21 +24,14 @@ import java.io.InputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -59,17 +53,20 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     CadernetaTableModel tbm;
     InputStream input;
     BufferedImage imagem;//recebe a imagem da linha selecionada da tabela
+   
 
     public CadMapa() {
         initComponents();
         setLocationRelativeTo(null);
         totalMapas();
+         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+            
 
     }
 
     public void Salvar() throws Exception {
         Mapas mapas = new Mapas();
-
+         
         if (verificaCampos()) {
             mapas.setTitulo(titulo.getText().toUpperCase());
             mapas.setFolha(folha.getText().toUpperCase());
@@ -130,8 +127,9 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         }
     }
 
-    public void salvaMapasRar() throws IOException {
-
+    public void salvaMapasRar() throws IOException, Exception {
+         Mapas mpas = new Mapas();  
+         
         //seleciona o caminho onde sera capturado a pasta com os mapas
         JFileChooser chooser = new JFileChooser("c:\\");
         chooser.setDialogTitle("Upload de pastas Georeferenciadas");
@@ -139,23 +137,37 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         int res = chooser.showOpenDialog(null);
         if (res == JFileChooser.APPROVE_OPTION) {
             String caminho = chooser.getSelectedFile().getAbsolutePath();//caminho da pasta selecionada
+           
+       
             File diretorio = new File(caminho);//cria um arquivo com os dados da pasta selecionada  
+          
             File arquivos[] = diretorio.listFiles();//cria uma lista de arquivos que foram selecionados
 
             String Titulo = titulo.getText().toUpperCase();
             String Folha = folha.getText().toUpperCase();
-            String nome = (Titulo + "_" + Folha);
-            //JOptionPane.showMessageDialog(null, nome);MA
+            String nome = (Titulo + "_" + Folha);           
             String extensao = ".rar";
             String local = "E:\\NovoMapa";
             File saida = new File(local, nome + extensao);
-
-            EnviaArquivos zipe = new EnviaArquivos();
-            // splashRar();
+            EnviaArquivos zipe = new EnviaArquivos(); 
             zipe.zip(arquivos, saida);//passa a lista de arquivo por parametro e retorna o caminho onde sera salvo o arquivo rar.
-
+             mpas.setCaminho(local);
+             JOptionPane.showMessageDialog(null, local);
+           
         }
     }
+    
+    public void recuperaMapasRar(){
+       String caminho = "";
+       File arquivo = new File(caminho);
+        try {
+            Desktop.getDesktop().open(arquivo);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, ex,  "ERRO",JOptionPane.ERROR_MESSAGE);
+        }
+    
+    }
+    
 
     public void removerMapas() throws Exception {
         MapasDao mapasDao = new MapasDao();
