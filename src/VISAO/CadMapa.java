@@ -9,7 +9,8 @@ import CONTROLE.JasperReportConnectionFactory;
 import MODELO.ManipulaBuffImage;
 import CONTROLE.MapasDao;
 import MODELO.CadernetaTableModel;
-import MODELO.EnviaArquivos;
+import MODELO.CopiaArquivos;
+import MODELO.EnviaArquivosRar;
 import MODELO.Mapas;
 import MODELO.MapasTableModel;
 import MODELO.ReportUtils;
@@ -53,20 +54,18 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     CadernetaTableModel tbm;
     InputStream input;
     BufferedImage imagem;//recebe a imagem da linha selecionada da tabela
-   
 
     public CadMapa() {
         initComponents();
         setLocationRelativeTo(null);
         totalMapas();
-         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-            
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
     }
 
     public void Salvar() throws Exception {
         Mapas mapas = new Mapas();
-         
+
         if (verificaCampos()) {
             mapas.setTitulo(titulo.getText().toUpperCase());
             mapas.setFolha(folha.getText().toUpperCase());
@@ -128,8 +127,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     }
 
     public void salvaMapasRar() throws IOException, Exception {
-         Mapas mpas = new Mapas();  
-         
+        Mapas mpas = new Mapas();
+
         //seleciona o caminho onde sera capturado a pasta com os mapas
         JFileChooser chooser = new JFileChooser("c:\\");
         chooser.setDialogTitle("Upload de pastas Georeferenciadas");
@@ -137,37 +136,29 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         int res = chooser.showOpenDialog(null);
         if (res == JFileChooser.APPROVE_OPTION) {
             String caminho = chooser.getSelectedFile().getAbsolutePath();//caminho da pasta selecionada
-           
-       
-            File diretorio = new File(caminho);//cria um arquivo com os dados da pasta selecionada  
-          
-            File arquivos[] = diretorio.listFiles();//cria uma lista de arquivos que foram selecionados
-
             String Titulo = titulo.getText().toUpperCase();
             String Folha = folha.getText().toUpperCase();
-            String nome = (Titulo + "_" + Folha);           
-            String extensao = ".rar";
+            String nome = (Titulo + "_" + Folha);         
             String local = "E:\\NovoMapa";
-            File saida = new File(local, nome + extensao);
-            EnviaArquivos zipe = new EnviaArquivos(); 
-            zipe.zip(arquivos, saida);//passa a lista de arquivo por parametro e retorna o caminho onde sera salvo o arquivo rar.
-             mpas.setCaminho(local);
-             JOptionPane.showMessageDialog(null, local);
-           
+            File src = new File(caminho);
+            File dst = new File(local,nome);
+            CopiaArquivos co = new CopiaArquivos();
+            co.copyAll(src, dst, true);
+            mpas.setCaminho(local);
+            JOptionPane.showMessageDialog(null, local);
         }
     }
-    
-    public void recuperaMapasRar(){
-       String caminho = "";
-       File arquivo = new File(caminho);
+
+    public void recuperaMapasRar() {
+        String caminho = "";
+        File arquivo = new File(caminho);
         try {
             Desktop.getDesktop().open(arquivo);
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, ex,  "ERRO",JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, ex, "ERRO", JOptionPane.ERROR_MESSAGE);
         }
-    
+
     }
-    
 
     public void removerMapas() throws Exception {
         MapasDao mapasDao = new MapasDao();

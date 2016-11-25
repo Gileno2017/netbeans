@@ -13,7 +13,7 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-public class EnviaArquivos {
+public class EnviaArquivosRar {
 
 	public void zip(File[] files, File outputFile) throws IOException {
                    
