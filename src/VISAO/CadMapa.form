@@ -469,8 +469,10 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="Deletar" linkSize="4" min="-2" pref="54" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="novoMapa" min="-2" pref="83" max="-2" attributes="0"/>
-                      <EmptySpace pref="240" max="32767" attributes="0"/>
+                      <Component id="novoMapa" linkSize="5" min="-2" pref="83" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="download" linkSize="5" min="-2" pref="78" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -478,9 +480,10 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="carregarImagem" alignment="0" max="32767" attributes="0"/>
                   <Component id="EnviaImagem" alignment="0" max="32767" attributes="0"/>
-                  <Component id="SalvarMapa" alignment="0" pref="81" max="32767" attributes="0"/>
+                  <Component id="SalvarMapa" alignment="0" max="32767" attributes="0"/>
                   <Component id="Deletar" alignment="0" max="32767" attributes="0"/>
-                  <Component id="novoMapa" alignment="0" max="32767" attributes="0"/>
+                  <Component id="novoMapa" linkSize="6" alignment="0" min="-2" pref="81" max="-2" attributes="0"/>
+                  <Component id="download" linkSize="6" alignment="0" min="-2" pref="81" max="-2" attributes="0"/>
               </Group>
             </DimensionLayout>
           </Layout>
@@ -541,6 +544,16 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="novoMapaActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JToggleButton" name="download">
+              <Properties>
+                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                  <Image iconType="3" name="/imagens/download.jpg"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="downloadActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
