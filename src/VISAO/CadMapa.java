@@ -108,6 +108,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             mapas.setGaveta(gaveta.getSelectedItem().toString().toUpperCase());
             mapas.setQuantidade(quantidade.getSelectedItem().toString().toUpperCase());
             mapas.setImagem(ManipulaBuffImage.getImgBytes(imagem));
+            mapas.setCaminho(String.valueOf(destino));
             //metodo responsavel por validar os campos na bean.mapas      
             ValidatorFactory validaMapas = Validation.buildDefaultValidatorFactory();
             Validator validador = validaMapas.getValidator();
@@ -127,7 +128,6 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     }
 
     public void salvaArquivos() throws IOException, Exception {
-
         //seleciona o caminho onde sera capturado a pasta com os mapas
         JFileChooser chooser = new JFileChooser("c:\\");
         chooser.setDialogTitle("Upload de pastas Georeferenciadas");
@@ -141,8 +141,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             String local = "E:\\NovoMapa";
             File src = new File(caminho);
             destino = new File(local, nome);
-            CopiaArquivos co = new CopiaArquivos();
-            co.copyAll(src, destino, true);
+            CopiaArquivos cp = new CopiaArquivos();
+            cp.copyAll(src, destino, true);
         }
     }
 
@@ -209,7 +209,6 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             }
         } else {
             label.setIcon(null);
-
         }
 
     }
@@ -251,9 +250,12 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         MapasDao mDao = new MapasDao();
         Mapas mapas = mDao.consultaMapasId(id);
         exibiImagemLabel(mapas.getImagem(), imagemMapa);
+        String caminho = mapas.getCaminho();
+        destino = new File(caminho);
+        
     }
-    // Metodo responsável por fazer o download do mapa 
 
+    // Metodo responsável por fazer o download do mapa     
     public void dounloadPastas() throws IOException {
         MapasDao mDao = new MapasDao();
         Mapas mps = mDao.consultaMapasId(id);
@@ -269,8 +271,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             String nome = (Titulo + "_" + Folha);
             File origem = new File(caminho);
             File downloads = new File(pastadeDownloads, nome);
-            CopiaArquivos co = new CopiaArquivos();
-            co.copyAll(origem, downloads, true);
+            CopiaArquivos cp = new CopiaArquivos();
+            cp.copyAll(origem, downloads, true);
         }
     }
 
@@ -287,7 +289,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         //Consulta de mapas por folha
         InputStream inputStream = getClass().getResourceAsStream("/Relatorios/MapasPorGaveta.jasper");
         Map parametros = new HashMap();
-        String texto = JOptionPane.showInputDialog("Informe Iniciais da folha para consulta, seguido de %").toUpperCase();
+        String texto = JOptionPane.showInputDialog("Informe Iniciais da folha para consulta").toUpperCase();
         parametros.put("ConsultaPorGaveta", "0" + texto + "%");
         ReportUtils.openReport("Relatorio de Mapas ", inputStream, parametros,
                 JasperReportConnectionFactory.getPostgresConnection());
@@ -912,8 +914,9 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             Cursor cursorAguandando = new Cursor(Cursor.WAIT_CURSOR);
             setCursor(cursorAguandando);
             dounloadPastas();
+            limpaCampos();
             Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
-            setCursor(normalCursor);
+            setCursor(normalCursor);            
         } catch (IOException ex) {
             Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -1,5 +1,7 @@
 package MODELO;
 
+
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -9,6 +11,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import javax.swing.JOptionPane;
 
 public class CopiaArquivos {
 
@@ -89,10 +92,11 @@ public class CopiaArquivos {
             if (files[i].isDirectory()) {
                 copyAll(files[i], new File(destino + "\\" + files[i].getName()), overwrite);
             } else {
-                System.out.println("Copiando arquivo: " + files[i].getName());
+              
                 copy(files[i], new File(destino + "\\" + files[i].getName()), overwrite);
             }
         }
+            JOptionPane.showMessageDialog(null, "Download Concluido!!");
     }
 
 }
