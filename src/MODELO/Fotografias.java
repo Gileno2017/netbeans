@@ -6,6 +6,7 @@
 package MODELO;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -44,9 +46,9 @@ public class Fotografias implements Serializable {
     private Long cod_Fotografia;
 
     @NotNull(message = "O campo TOTAL deve ser preenchido")
-     @NotBlank(message = "O campo TOTAL deve ser preenchido")
-     @Pattern(regexp = "[0-9]+", message = "o campo TOTAL  deve ser preenchido somente com numeros")
-     @Length(max = 20, message = "O TOTAL não pode conter mais de {max} caracteres")
+    @NotBlank(message = "O campo TOTAL deve ser preenchido")
+    @Pattern(regexp = "[0-9]+", message = "o campo TOTAL  deve ser preenchido somente com numeros")
+    @Length(max = 20, message = "O TOTAL não pode conter mais de {max} caracteres")
     private String totaFotografias;
 
     @NotNull(message = "O campo CÓDIGO INICIAL não pode ser nulo")
@@ -67,7 +69,6 @@ public class Fotografias implements Serializable {
     @Length(max = 30, message = "O campo EXECUTOR não pode conter mais de {max} caracteres")
     private String orgaoExecutor;
 
-    
     @NotNull(message = "O campo CAIXA não pode ser nulo")
     @NotBlank(message = "O campo CAIXA deve ser preenchido")
     @Pattern(regexp = "[0-9]+", message = "o campo CAIXA deve ser preenchido somente com numeros")
@@ -78,7 +79,10 @@ public class Fotografias implements Serializable {
     @JoinColumn(name = "codMapa")
     private Mapas mapas;
 
-    
+    @OneToMany(mappedBy = "fotos")
+    @JoinColumn(name = "idImagemMapas")    
+    private  List<ImagemMapas> imagemMapas;
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -151,6 +155,14 @@ public class Fotografias implements Serializable {
 
     public void setMapas(Mapas mapas) {
         this.mapas = mapas;
+    }
+
+    public List<ImagemMapas> getImagemMapas() {
+        return imagemMapas;
+    }
+
+    public void setImagemMapas(List<ImagemMapas> imagemMapas) {
+        this.imagemMapas = imagemMapas;
     }
 
 }

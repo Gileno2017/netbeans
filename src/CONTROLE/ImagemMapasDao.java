@@ -35,12 +35,12 @@ public class ImagemMapasDao {
 
             try{
             em.getTransaction().begin();
-            if(img.getId() == null){
-                em.persist(img);// salva mapa no banco de dados
+            if(img.getIdImagemMapas() == null){
+                em.persist(img);// salva  as Imagens do mapa no banco de dados
                 
               }else{
                 if(!em.contains(img)){
-                   if(em.find(ImagemMapas.class,img.getId())== null){
+                   if(em.find(ImagemMapas.class,img.getIdImagemMapas())== null){
                      throw new Exception("Erro ao Salvar a Imagem");
                    }
                 }
@@ -69,7 +69,7 @@ public class ImagemMapasDao {
           
       }
       
-       public ImagemMapas consultaPorId(Long id){
+       public ImagemMapas consultaImagemMapasPorId(Long id){
               EntityManager em = getEM();
               ImagemMapas img = null;
               try {
@@ -88,7 +88,7 @@ public class ImagemMapasDao {
            List<ImagemMapas> listImagemMapas;
            
            try {
-               Query q = em.createNamedQuery("Caderneta.ConsultaTodos");
+               Query q = em.createNamedQuery("ImagemMapas.ConsultaTodos");
                listImagemMapas = q.getResultList();
            } catch (Exception e) {
                listImagemMapas = new ArrayList();

@@ -64,7 +64,20 @@ public class FotografiaDao {
         }
         return listFotografias;
     }
-
+    
+      public Fotografias consultaFotografiasPorId(Long id){
+              EntityManager em = getEM();
+              Fotografias foto = null;
+              try {
+               em.getTransaction().begin();
+               foto = em.find(Fotografias.class, id);
+               em.getTransaction().commit();
+              } finally {
+               em.close();
+             }
+            
+             return foto;
+          }
     public void removeFotografias(Long id) {
         EntityManager em = getEM();
         Fotografias foto = em.find(Fotografias.class, id);

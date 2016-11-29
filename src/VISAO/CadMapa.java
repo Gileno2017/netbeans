@@ -146,16 +146,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         }
     }
 
-    public void recuperaMapasRar() {
-        String caminho = "";
-        File arquivo = new File(caminho);
-        try {
-            Desktop.getDesktop().open(arquivo);
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, ex, "ERRO", JOptionPane.ERROR_MESSAGE);
-        }
-
-    }
+   
 
     public void removerMapas() throws Exception {
         MapasDao mapasDao = new MapasDao();
