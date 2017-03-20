@@ -1,7 +1,5 @@
 package MODELO;
 
-
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -23,7 +21,6 @@ public class CopiaArquivos {
      * @param overwrite - Confirmação para sobrescrever os arquivos
      * @throws IOException
      */
-
     public static void copy(File origem, File destino, boolean overwrite) throws IOException {
         if (destino.exists() && !overwrite) {
             return;
@@ -77,7 +74,7 @@ public class CopiaArquivos {
      * @throws IOException, UnsupportedOperationException
      */
     public void copyAll(File origem, File destino, boolean overwrite) throws IOException, UnsupportedOperationException {
-
+        String arquivos = null;
         if (!destino.exists()) {
             destino.mkdir();
         }
@@ -92,11 +89,11 @@ public class CopiaArquivos {
             if (files[i].isDirectory()) {
                 copyAll(files[i], new File(destino + "\\" + files[i].getName()), overwrite);
             } else {
-              
+                arquivos = " " + files[i].getName();
                 copy(files[i], new File(destino + "\\" + files[i].getName()), overwrite);
             }
         }
-            JOptionPane.showMessageDialog(null, "Download Concluido!!");
+        JOptionPane.showMessageDialog(null, "Download Concluido!!" + arquivos);
     }
 
 }

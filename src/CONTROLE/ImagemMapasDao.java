@@ -115,6 +115,24 @@ public class ImagemMapasDao {
         }
     }
     
+  public List<ImagemMapas> consultaImagensPorFotografias(Long id){
+           EntityManager em = getEM();
+           List<ImagemMapas> listImagemMapas;
+           
+           try {
+               Query q = em.createNamedQuery("imagemMapas.consultaPorFotografias");
+               q.setParameter("fotosId", id);
+               listImagemMapas = q.getResultList();
+           } catch (Exception e) {
+               listImagemMapas = new ArrayList();
+           }finally{
+           em.close();
+            }
+         return listImagemMapas;
+      
+       }
+       
+     
     
 }
 

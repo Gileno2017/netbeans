@@ -25,7 +25,10 @@ import javax.validation.constraints.NotNull;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "ImagemMapas.consultaPorId",
-            query = "SELECT e FROM  ImagemMapas e"),})
+            query = "SELECT e FROM  ImagemMapas e"),
+    @NamedQuery(name="imagemMapas.consultaPorFotografias",
+       query = "SELECT e FROM ImagemMapas e WHERE  e.fotos.cod_Fotografia = :fotosId " ),
+})
 
 public class ImagemMapas implements Serializable {
 
