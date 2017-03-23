@@ -93,7 +93,7 @@ public class CopiaArquivos {
                 copy(files[i], new File(destino + "\\" + files[i].getName()), overwrite);
             }
         }
-        JOptionPane.showMessageDialog(null, "Download Concluido!!" + arquivos);
+        JOptionPane.showMessageDialog(null, " Concluido com Sucesso!!" + arquivos);
     }
 
 }

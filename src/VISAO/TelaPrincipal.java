@@ -46,6 +46,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
         jM_ListagemPorFolha = new javax.swing.JMenuItem();
         jM_ConsultaPorGaveta = new javax.swing.JMenuItem();
         jM_ListagemPorTitulo = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,7 +71,13 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
 
         jMenuBar1.setMaximumSize(new java.awt.Dimension(179, 900));
 
+        jMenu2.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/computer.png"))); // NOI18N
         jMenu2.setText("Cadastrar");
+        jMenu2.setToolTipText("Cadastrar Dados");
+        jMenu2.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jMenu2.setIconTextGap(5);
+        jMenu2.setInheritsPopupMenu(true);
 
         jM_cadastrarMapas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
         jM_cadastrarMapas.setText("Mapas");
@@ -101,7 +108,9 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
 
         jMenuBar1.add(jMenu2);
 
+        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Search_Computer_1_36841.png"))); // NOI18N
         jMenu3.setText("Pesquisar");
+        jMenu3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
 
         jM_pesquisarMapas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.SHIFT_MASK));
         jM_pesquisarMapas.setText("Mapas");
@@ -132,7 +141,9 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
 
         jMenuBar1.add(jMenu3);
 
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/list_notes_930.png"))); // NOI18N
         jMenu4.setText("Relatórios");
+        jMenu4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
 
         jM_ListagemMapas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.SHIFT_MASK));
         jM_ListagemMapas.setText("Mapas");
@@ -171,6 +182,11 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
         jMenu4.add(jM_ListagemPorTitulo);
 
         jMenuBar1.add(jMenu4);
+
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Help_26772.png"))); // NOI18N
+        jMenu1.setText("Ajuda");
+        jMenu1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -303,6 +319,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
     private javax.swing.JMenuItem jM_pesquisarCaderneta;
     private javax.swing.JMenuItem jM_pesquisarMapas;
     private javax.swing.JMenuItem jM_pesquisarfotografias;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
