@@ -366,12 +366,19 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         jLabel9 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jM_ListagemMapas = new javax.swing.JMenuItem();
         jM_ListagemPorFolha = new javax.swing.JMenuItem();
         jM_ConsultaPorGaveta = new javax.swing.JMenuItem();
         jM_ListagemPorTitulo = new javax.swing.JMenuItem();
+        jSeparator1 = new javax.swing.JPopupMenu.Separator();
+        jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem6 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -538,7 +545,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
 
         SalvarMapa.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         SalvarMapa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/save_14706.png"))); // NOI18N
-        SalvarMapa.setToolTipText("Salvar ou Atulizar Dados");
+        SalvarMapa.setToolTipText("Salvar ou Atualizar Dados");
         SalvarMapa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 SalvarMapaActionPerformed(evt);
@@ -569,7 +576,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             }
         });
 
-        jB_Sair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/SignOut_icon-icons.com_74704.png"))); // NOI18N
+        jB_Sair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Sair.png"))); // NOI18N
         jB_Sair.setToolTipText("Sair");
         jB_Sair.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         jB_Sair.addActionListener(new java.awt.event.ActionListener() {
@@ -738,17 +745,47 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         );
 
         jMenu1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/map_512x512_35976.png"))); // NOI18N
-        jMenu1.setText("Cadastros");
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/computer.png"))); // NOI18N
+        jMenu1.setToolTipText("Cadastro");
+
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/picture_photo_preview_2628.png"))); // NOI18N
+        jMenuItem1.setText("Fotografias");
+        jMenu1.add(jMenuItem1);
+
+        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK));
+        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/notebook_notes_147.png"))); // NOI18N
+        jMenuItem2.setText("Caderneta de Campo");
+        jMenu1.add(jMenuItem2);
+
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/map_search_find_maps_10803.png"))); // NOI18N
-        jMenu2.setText("Listagem");
+        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Search_Computer_1_36841.png"))); // NOI18N
+        jMenu2.setToolTipText("Pesquisar");
+
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/picture_photo_preview_2628.png"))); // NOI18N
+        jMenuItem3.setText("Fotografias");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
+
+        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
+        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/notebook_notes_147.png"))); // NOI18N
+        jMenuItem4.setText("Caderneta de Campo");
+        jMenu2.add(jMenuItem4);
+
         jMenuBar1.add(jMenu2);
 
-        jMenu3.setText("Relatórios");
+        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/list_notes_930.png"))); // NOI18N
+        jMenu3.setToolTipText("Relatórios");
+        jMenu3.setAutoscrolls(true);
 
         jM_ListagemMapas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ListagemMapas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/map_512x512_35976.png"))); // NOI18N
         jM_ListagemMapas.setText("Mapas");
         jM_ListagemMapas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -758,6 +795,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         jMenu3.add(jM_ListagemMapas);
 
         jM_ListagemPorFolha.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ListagemPorFolha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/folha.png"))); // NOI18N
         jM_ListagemPorFolha.setText("Mapas Por Folha");
         jM_ListagemPorFolha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -767,6 +805,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         jMenu3.add(jM_ListagemPorFolha);
 
         jM_ConsultaPorGaveta.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ConsultaPorGaveta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/gaveta.png"))); // NOI18N
         jM_ConsultaPorGaveta.setText("Mapas Por Gaveta");
         jM_ConsultaPorGaveta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -776,6 +815,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         jMenu3.add(jM_ConsultaPorGaveta);
 
         jM_ListagemPorTitulo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ListagemPorTitulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/titulo.png"))); // NOI18N
         jM_ListagemPorTitulo.setText("Mapas Por Título");
         jM_ListagemPorTitulo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -783,10 +823,27 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             }
         });
         jMenu3.add(jM_ListagemPorTitulo);
+        jMenu3.add(jSeparator1);
+
+        jMenuItem5.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/people_6080.png"))); // NOI18N
+        jMenuItem5.setText("Caderneta por Geólogo");
+        jMenu3.add(jMenuItem5);
+
+        jMenuItem6.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK));
+        jMenuItem6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/projeto.png"))); // NOI18N
+        jMenuItem6.setText("Caderneta por Projeto");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jMenuItem6);
 
         jMenuBar1.add(jMenu3);
 
-        jMenu4.setText("Ajuda");
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Help_26772.png"))); // NOI18N
+        jMenu4.setToolTipText("Ajuda");
         jMenuBar1.add(jMenu4);
 
         setJMenuBar(jMenuBar1);
@@ -913,38 +970,6 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
 
     }//GEN-LAST:event_novoMapaActionPerformed
 
-    private void jM_ListagemMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemMapasActionPerformed
-        try {
-            abrirRelatorioMapas();
-        } catch (JRException | SQLException ex) {
-            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jM_ListagemMapasActionPerformed
-
-    private void jM_ListagemPorFolhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemPorFolhaActionPerformed
-        try {
-            abrirRelatorioMapasPorFolha();
-        } catch (JRException | SQLException ex) {
-            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jM_ListagemPorFolhaActionPerformed
-
-    private void jM_ConsultaPorGavetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ConsultaPorGavetaActionPerformed
-        try {
-            abrirRelatorioMapasPorGaveta();
-        } catch (JRException | SQLException ex) {
-            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jM_ConsultaPorGavetaActionPerformed
-
-    private void jM_ListagemPorTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemPorTituloActionPerformed
-        try {
-            abriRelatorioMapasPorTitulo();
-        } catch (JRException | SQLException ex) {
-            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jM_ListagemPorTituloActionPerformed
-
     private void downloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_downloadActionPerformed
         try {
             Cursor cursorAguandando = new Cursor(Cursor.WAIT_CURSOR);
@@ -966,6 +991,46 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     private void jB_SairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_SairActionPerformed
     dispose();
     }//GEN-LAST:event_jB_SairActionPerformed
+
+    private void jM_ListagemPorTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemPorTituloActionPerformed
+        try {
+            abriRelatorioMapasPorTitulo();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ListagemPorTituloActionPerformed
+
+    private void jM_ConsultaPorGavetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ConsultaPorGavetaActionPerformed
+        try {
+            abrirRelatorioMapasPorGaveta();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ConsultaPorGavetaActionPerformed
+
+    private void jM_ListagemPorFolhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemPorFolhaActionPerformed
+        try {
+            abrirRelatorioMapasPorFolha();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ListagemPorFolhaActionPerformed
+
+    private void jM_ListagemMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemMapasActionPerformed
+        try {
+            abrirRelatorioMapas();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ListagemMapasActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1044,11 +1109,18 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jP_Mapas;
     private javax.swing.JPanel jP_campos;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JButton novoMapa;
     private javax.swing.JTextField pesquisa;
     private javax.swing.JButton pesquisarMapas;
