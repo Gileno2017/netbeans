@@ -744,7 +744,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jMenu1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jMenu1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 2, true));
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/computer.png"))); // NOI18N
         jMenu1.setToolTipText("Cadastro");
 
