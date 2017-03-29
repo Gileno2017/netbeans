@@ -5,10 +5,19 @@
  */
 package VISAO;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 
 /**
@@ -19,6 +28,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
 
     public TelaPrincipal() {
         initComponents();
+        setLocationRelativeTo(null);
         this.setTitle("ArcMapa (Mapoteca Sureg_MA)");
     }
 
@@ -50,6 +60,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
+        jM_cadastroMapa = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -198,6 +209,16 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
         jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Help_26772.png"))); // NOI18N
         jMenu1.setToolTipText("Ajuda");
         jMenu1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+
+        jM_cadastroMapa.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.ALT_MASK));
+        jM_cadastroMapa.setText("Cadastro de  Mapas");
+        jM_cadastroMapa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_cadastroMapaActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jM_cadastroMapa);
+
         jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
@@ -207,48 +228,48 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(40, 40, 40)
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(40, 40, 40)
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addGap(40, 40, 40))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jM_cadastrarMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastrarMapasActionPerformed
-       CadMapa mapas = new CadMapa();
+        CadMapa mapas = new CadMapa();
         mapas.setVisible(true);
     }//GEN-LAST:event_jM_cadastrarMapasActionPerformed
 
     private void jM_pesquisarMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarMapasActionPerformed
-      CadMapa mapas = new CadMapa();
+        CadMapa mapas = new CadMapa();
         mapas.setVisible(true);
     }//GEN-LAST:event_jM_pesquisarMapasActionPerformed
 
     private void jM_pesquisarCadernetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarCadernetaActionPerformed
-       Cadernetas cadernetas = new Cadernetas();
+        Cadernetas cadernetas = new Cadernetas();
         cadernetas.setVisible(true);
     }//GEN-LAST:event_jM_pesquisarCadernetaActionPerformed
 
     private void jM_pesquisarfotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarfotografiasActionPerformed
-       CadFotografiasAerea fotografias = new CadFotografiasAerea();
+        CadFotografiasAerea fotografias = new CadFotografiasAerea();
         fotografias.setVisible(true);
     }//GEN-LAST:event_jM_pesquisarfotografiasActionPerformed
 
     private void jM_cadastrarCadernetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastrarCadernetasActionPerformed
-       Cadernetas cadernetas = new Cadernetas();
+        Cadernetas cadernetas = new Cadernetas();
         cadernetas.setVisible(true);
     }//GEN-LAST:event_jM_cadastrarCadernetasActionPerformed
 
     private void jM_cadastrarfotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastrarfotografiasActionPerformed
-       CadFotografiasAerea fotografias = new CadFotografiasAerea();
+        CadFotografiasAerea fotografias = new CadFotografiasAerea();
         fotografias.setVisible(true);
     }//GEN-LAST:event_jM_cadastrarfotografiasActionPerformed
 
@@ -264,7 +285,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
     private void jM_ListagemPorFolhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemPorFolhaActionPerformed
         try {
             CadMapa mapas = new CadMapa();
-           mapas.abrirRelatorioMapasPorFolha();
+            mapas.abrirRelatorioMapasPorFolha();
         } catch (JRException | SQLException ex) {
             Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -292,6 +313,53 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void jM_cadastroMapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastroMapaActionPerformed
+       lerPDF();
+    }//GEN-LAST:event_jM_cadastroMapaActionPerformed
+     private void lerPDF(){
+      if (Desktop.isDesktopSupported()) {
+            // Arquivo no diretório de trabalho do usuário, System.getProperty ("user.dir");
+            File file = new File("Tutorialcadastro.pdf");
+            if (!file.exists()) {
+                // no JAR
+                InputStream inputStream = ClassLoader.getSystemClassLoader()
+                        .getResourceAsStream("Tutorial/Tutorialcadastro.pdf");
+                // copiando arquivo
+                OutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(file);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                byte[] buffer = new byte[1024];
+                int length;
+                try {
+                    while ((length = inputStream.read(buffer)) > 0) {
+                        outputStream.write(buffer, 0, length);
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    outputStream.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    inputStream.close();
+                } catch (IOException ex) {
+                    Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            try {
+                // Open file
+                Desktop.getDesktop().open(file);
+            } catch (IOException ex) {
+                Logger.getLogger(TelaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+     
+     }
     /**
      * @param args the command line arguments
      */
@@ -336,6 +404,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
     private javax.swing.JMenuItem jM_cadastrarCadernetas;
     private javax.swing.JMenuItem jM_cadastrarMapas;
     private javax.swing.JMenuItem jM_cadastrarfotografias;
+    private javax.swing.JMenuItem jM_cadastroMapa;
     private javax.swing.JMenuItem jM_pesquisarCaderneta;
     private javax.swing.JMenuItem jM_pesquisarMapas;
     private javax.swing.JMenuItem jM_pesquisarfotografias;

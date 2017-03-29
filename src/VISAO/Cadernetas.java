@@ -209,11 +209,21 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable {
         Salvar = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
+        jMenu3 = new javax.swing.JMenu();
+        jM_cadastrarMapas = new javax.swing.JMenuItem();
+        jM_cadastrarfotografias = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jM_pesquisarMapas = new javax.swing.JMenuItem();
+        jM_pesquisarfotografias = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jM_ListagemMapas = new javax.swing.JMenuItem();
+        jM_ListagemPorFolha = new javax.swing.JMenuItem();
+        jM_ConsultaPorGaveta = new javax.swing.JMenuItem();
+        jM_ListagemPorTitulo = new javax.swing.JMenuItem();
+        jSeparator2 = new javax.swing.JPopupMenu.Separator();
+        jM_cadernetaPorGeologo = new javax.swing.JMenuItem();
+        jM_cadernetaPorProjeto = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
-        jM_relatorio_cadernetas = new javax.swing.JMenuItem();
-        jM_relatorio_geologo = new javax.swing.JMenuItem();
-        jM_relatorio_projeto = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadernetas de Campo");
@@ -493,39 +503,126 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable {
                 .addComponent(jButton3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jMenu1.setText("Cadastros");
+        jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/computer.png"))); // NOI18N
+        jMenu3.setToolTipText("Cadastrar Dados");
+        jMenu3.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jMenu3.setIconTextGap(5);
+        jMenu3.setInheritsPopupMenu(true);
+
+        jM_cadastrarMapas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.CTRL_MASK));
+        jM_cadastrarMapas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/map_512x512_35976.png"))); // NOI18N
+        jM_cadastrarMapas.setText("Mapas");
+        jM_cadastrarMapas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_cadastrarMapasActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jM_cadastrarMapas);
+
+        jM_cadastrarfotografias.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        jM_cadastrarfotografias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/picture_photo_preview_2628.png"))); // NOI18N
+        jM_cadastrarfotografias.setText("Fotografias");
+        jM_cadastrarfotografias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_cadastrarfotografiasActionPerformed(evt);
+            }
+        });
+        jMenu3.add(jM_cadastrarfotografias);
+
+        jMenuBar1.add(jMenu3);
+
+        jMenu4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Search_Computer_1_36841.png"))); // NOI18N
+        jMenu4.setToolTipText("Pesquisar");
+        jMenu4.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+
+        jM_pesquisarMapas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_pesquisarMapas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/map_512x512_35976.png"))); // NOI18N
+        jM_pesquisarMapas.setText("Mapas");
+        jM_pesquisarMapas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_pesquisarMapasActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jM_pesquisarMapas);
+
+        jM_pesquisarfotografias.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_pesquisarfotografias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/picture_photo_preview_2628.png"))); // NOI18N
+        jM_pesquisarfotografias.setText("Fotografias");
+        jM_pesquisarfotografias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_pesquisarfotografiasActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jM_pesquisarfotografias);
+
+        jMenuBar1.add(jMenu4);
+
+        jMenu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/list_notes_930.png"))); // NOI18N
+        jMenu5.setToolTipText("Relatórios");
+        jMenu5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+
+        jM_ListagemMapas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ListagemMapas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/map_512x512_35976.png"))); // NOI18N
+        jM_ListagemMapas.setText("Mapas");
+        jM_ListagemMapas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_ListagemMapasActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jM_ListagemMapas);
+
+        jM_ListagemPorFolha.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ListagemPorFolha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/folha.png"))); // NOI18N
+        jM_ListagemPorFolha.setText("Mapas Por Folha");
+        jM_ListagemPorFolha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_ListagemPorFolhaActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jM_ListagemPorFolha);
+
+        jM_ConsultaPorGaveta.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ConsultaPorGaveta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/gaveta.png"))); // NOI18N
+        jM_ConsultaPorGaveta.setText("Mapas Por Gaveta");
+        jM_ConsultaPorGaveta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_ConsultaPorGavetaActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jM_ConsultaPorGaveta);
+
+        jM_ListagemPorTitulo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_T, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_ListagemPorTitulo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/titulo.png"))); // NOI18N
+        jM_ListagemPorTitulo.setText("Mapas Por Título");
+        jM_ListagemPorTitulo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_ListagemPorTituloActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jM_ListagemPorTitulo);
+        jMenu5.add(jSeparator2);
+
+        jM_cadernetaPorGeologo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        jM_cadernetaPorGeologo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/people_6080.png"))); // NOI18N
+        jM_cadernetaPorGeologo.setText("Caderneta por Geólogo");
+        jMenu5.add(jM_cadernetaPorGeologo);
+
+        jM_cadernetaPorProjeto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_cadernetaPorProjeto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/projeto.png"))); // NOI18N
+        jM_cadernetaPorProjeto.setText("Caderneta por Projeto");
+        jM_cadernetaPorProjeto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_cadernetaPorProjetoActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jM_cadernetaPorProjeto);
+
+        jMenuBar1.add(jMenu5);
+
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Help_26772.png"))); // NOI18N
+        jMenu1.setToolTipText("Ajuda");
+        jMenu1.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
         jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Relatórios");
-
-        jM_relatorio_cadernetas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK));
-        jM_relatorio_cadernetas.setText("Cadernetas");
-        jM_relatorio_cadernetas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jM_relatorio_cadernetasActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jM_relatorio_cadernetas);
-
-        jM_relatorio_geologo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.SHIFT_MASK));
-        jM_relatorio_geologo.setText("Cadernetas Por Geólogo");
-        jM_relatorio_geologo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jM_relatorio_geologoActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jM_relatorio_geologo);
-
-        jM_relatorio_projeto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK));
-        jM_relatorio_projeto.setText("Cadernetas Por Projeto");
-        jM_relatorio_projeto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jM_relatorio_projetoActionPerformed(evt);
-            }
-        });
-        jMenu2.add(jM_relatorio_projeto);
-
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -558,7 +655,7 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jP_botoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -674,29 +771,65 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable {
         setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jM_relatorio_cadernetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_relatorio_cadernetasActionPerformed
-        try {
-            emitirRelatorios();
-        } catch (JRException | SQLException ex) {
-            Logger.getLogger(Cadernetas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jM_relatorio_cadernetasActionPerformed
+    private void jM_cadastrarMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastrarMapasActionPerformed
+        CadMapa mapas = new CadMapa();
+        mapas.setVisible(true);
+    }//GEN-LAST:event_jM_cadastrarMapasActionPerformed
 
-    private void jM_relatorio_geologoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_relatorio_geologoActionPerformed
-        try {
-            emitirRelatoriosPorGeologo();        // TODO add your handling code here:
-        } catch (JRException | SQLException ex) {
-            Logger.getLogger(Cadernetas.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jM_relatorio_geologoActionPerformed
+    private void jM_cadastrarfotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastrarfotografiasActionPerformed
+        CadFotografiasAerea fotografias = new CadFotografiasAerea();
+        fotografias.setVisible(true);
+    }//GEN-LAST:event_jM_cadastrarfotografiasActionPerformed
 
-    private void jM_relatorio_projetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_relatorio_projetoActionPerformed
+    private void jM_pesquisarMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarMapasActionPerformed
+        CadMapa mapas = new CadMapa();
+        mapas.setVisible(true);
+    }//GEN-LAST:event_jM_pesquisarMapasActionPerformed
+
+    private void jM_pesquisarfotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarfotografiasActionPerformed
+        CadFotografiasAerea fotografias = new CadFotografiasAerea();
+        fotografias.setVisible(true);
+    }//GEN-LAST:event_jM_pesquisarfotografiasActionPerformed
+
+    private void jM_ListagemMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemMapasActionPerformed
         try {
-            emitirRelatoriosPorProjeto();
+            CadMapa mapas = new CadMapa();
+            mapas.abrirRelatorioMapas();
         } catch (JRException | SQLException ex) {
-            Logger.getLogger(Cadernetas.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jM_relatorio_projetoActionPerformed
+    }//GEN-LAST:event_jM_ListagemMapasActionPerformed
+
+    private void jM_ListagemPorFolhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemPorFolhaActionPerformed
+        try {
+            CadMapa mapas = new CadMapa();
+            mapas.abrirRelatorioMapasPorFolha();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ListagemPorFolhaActionPerformed
+
+    private void jM_ConsultaPorGavetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ConsultaPorGavetaActionPerformed
+        try {
+            CadMapa mapas = new CadMapa();
+            mapas.abrirRelatorioMapasPorGaveta();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ConsultaPorGavetaActionPerformed
+
+    private void jM_ListagemPorTituloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemPorTituloActionPerformed
+        try {
+            CadMapa mps = new CadMapa();
+            mps.abriRelatorioMapasPorTitulo();
+        } catch (JRException | SQLException ex) {
+            Logger.getLogger(CadMapa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jM_ListagemPorTituloActionPerformed
+
+    private void jM_cadernetaPorProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadernetaPorProjetoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jM_cadernetaPorProjetoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -756,17 +889,27 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable {
     private javax.swing.JLabel jL_totalCadenetas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JMenuItem jM_relatorio_cadernetas;
-    private javax.swing.JMenuItem jM_relatorio_geologo;
-    private javax.swing.JMenuItem jM_relatorio_projeto;
+    private javax.swing.JMenuItem jM_ConsultaPorGaveta;
+    private javax.swing.JMenuItem jM_ListagemMapas;
+    private javax.swing.JMenuItem jM_ListagemPorFolha;
+    private javax.swing.JMenuItem jM_ListagemPorTitulo;
+    private javax.swing.JMenuItem jM_cadastrarMapas;
+    private javax.swing.JMenuItem jM_cadastrarfotografias;
+    private javax.swing.JMenuItem jM_cadernetaPorGeologo;
+    private javax.swing.JMenuItem jM_cadernetaPorProjeto;
+    private javax.swing.JMenuItem jM_pesquisarMapas;
+    private javax.swing.JMenuItem jM_pesquisarfotografias;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jP_botoes;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPopupMenu.Separator jSeparator2;
     private javax.swing.JLabel lnome;
     private javax.swing.JLabel lprojeto;
     private javax.swing.JLabel lquantidade;
@@ -776,4 +919,5 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable {
     private javax.swing.JTable tabela;
     private javax.swing.JComboBox<String> tipo;
     // End of variables declaration//GEN-END:variables
+
 }

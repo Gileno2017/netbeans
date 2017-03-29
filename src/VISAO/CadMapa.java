@@ -365,12 +365,12 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         pesquisa = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
+        jM_cadastros = new javax.swing.JMenu();
+        jM_fotografiaAerea = new javax.swing.JMenuItem();
+        jM_cadernetas = new javax.swing.JMenuItem();
+        jMenu5 = new javax.swing.JMenu();
+        jM_pesquisarfotografias = new javax.swing.JMenuItem();
+        jM_pesquisarCaderneta = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jM_ListagemMapas = new javax.swing.JMenuItem();
         jM_ListagemPorFolha = new javax.swing.JMenuItem();
@@ -744,41 +744,57 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jMenu1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 2, true));
-        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/computer.png"))); // NOI18N
-        jMenu1.setToolTipText("Cadastro");
+        jM_cadastros.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 2, true));
+        jM_cadastros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/computer.png"))); // NOI18N
+        jM_cadastros.setToolTipText("Cadastro");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/picture_photo_preview_2628.png"))); // NOI18N
-        jMenuItem1.setText("Fotografias");
-        jMenu1.add(jMenuItem1);
-
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK));
-        jMenuItem2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/notebook_notes_147.png"))); // NOI18N
-        jMenuItem2.setText("Caderneta de Campo");
-        jMenu1.add(jMenuItem2);
-
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Search_Computer_1_36841.png"))); // NOI18N
-        jMenu2.setToolTipText("Pesquisar");
-
-        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
-        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/picture_photo_preview_2628.png"))); // NOI18N
-        jMenuItem3.setText("Fotografias");
-        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+        jM_fotografiaAerea.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        jM_fotografiaAerea.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/picture_photo_preview_2628.png"))); // NOI18N
+        jM_fotografiaAerea.setText("Fotografias");
+        jM_fotografiaAerea.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem3ActionPerformed(evt);
+                jM_fotografiaAereaActionPerformed(evt);
             }
         });
-        jMenu2.add(jMenuItem3);
+        jM_cadastros.add(jM_fotografiaAerea);
 
-        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
-        jMenuItem4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/notebook_notes_147.png"))); // NOI18N
-        jMenuItem4.setText("Caderneta de Campo");
-        jMenu2.add(jMenuItem4);
+        jM_cadernetas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_cadernetas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/notebook_notes_147.png"))); // NOI18N
+        jM_cadernetas.setText("Caderneta de Campo");
+        jM_cadernetas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_cadernetasActionPerformed(evt);
+            }
+        });
+        jM_cadastros.add(jM_cadernetas);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(jM_cadastros);
+
+        jMenu5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/Search_Computer_1_36841.png"))); // NOI18N
+        jMenu5.setToolTipText("Pesquisar");
+        jMenu5.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+
+        jM_pesquisarfotografias.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
+        jM_pesquisarfotografias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/picture_photo_preview_2628.png"))); // NOI18N
+        jM_pesquisarfotografias.setText("Fotografias");
+        jM_pesquisarfotografias.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_pesquisarfotografiasActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jM_pesquisarfotografias);
+
+        jM_pesquisarCaderneta.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
+        jM_pesquisarCaderneta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/notebook_notes_147.png"))); // NOI18N
+        jM_pesquisarCaderneta.setText("Caderneta de Campo");
+        jM_pesquisarCaderneta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM_pesquisarCadernetaActionPerformed(evt);
+            }
+        });
+        jMenu5.add(jM_pesquisarCaderneta);
+
+        jMenuBar1.add(jMenu5);
 
         jMenu3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/list_notes_930.png"))); // NOI18N
         jMenu3.setToolTipText("Relatórios");
@@ -1024,13 +1040,30 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         }
     }//GEN-LAST:event_jM_ListagemMapasActionPerformed
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
-
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jM_fotografiaAereaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_fotografiaAereaActionPerformed
+      CadFotografiasAerea fta = new CadFotografiasAerea ();
+      fta.setVisible(true);
+            
+    }//GEN-LAST:event_jM_fotografiaAereaActionPerformed
+
+    private void jM_cadernetasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadernetasActionPerformed
+       Cadernetas cad = new Cadernetas();
+       cad.setVisible(true);     
+    }//GEN-LAST:event_jM_cadernetasActionPerformed
+
+    private void jM_pesquisarfotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarfotografiasActionPerformed
+        CadFotografiasAerea fotografias = new CadFotografiasAerea();
+        fotografias.setVisible(true);
+    }//GEN-LAST:event_jM_pesquisarfotografiasActionPerformed
+
+    private void jM_pesquisarCadernetaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarCadernetaActionPerformed
+        Cadernetas cadernetas = new Cadernetas();
+        cadernetas.setVisible(true);
+    }//GEN-LAST:event_jM_pesquisarCadernetaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1104,15 +1137,15 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     private javax.swing.JMenuItem jM_ListagemMapas;
     private javax.swing.JMenuItem jM_ListagemPorFolha;
     private javax.swing.JMenuItem jM_ListagemPorTitulo;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jM_cadastros;
+    private javax.swing.JMenuItem jM_cadernetas;
+    private javax.swing.JMenuItem jM_fotografiaAerea;
+    private javax.swing.JMenuItem jM_pesquisarCaderneta;
+    private javax.swing.JMenuItem jM_pesquisarfotografias;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenu jMenu5;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jP_Mapas;
