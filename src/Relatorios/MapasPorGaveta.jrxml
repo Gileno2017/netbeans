@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="8b702e44-6959-4077-b120-00f637227c97">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ConsultaPorGaveta" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT * FROM mapas
+WHERE gaveta LIKE $P{ConsultaPorGaveta}
+ORDER BY gaveta;]]>
+	</queryString>
+	<field name="codmapa" class="java.lang.Long"/>
+	<field name="ano" class="java.lang.String"/>
+	<field name="editora" class="java.lang.String"/>
+	<field name="escala" class="java.lang.String"/>
+	<field name="folha" class="java.lang.String"/>
+	<field name="gaveta" class="java.lang.String"/>
+	<field name="imagem" class="java.lang.Object"/>
+	<field name="quantidade" class="java.lang.String"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="titulo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="111" y="21" width="334" height="38" uuid="0d9c7437-302a-42ba-b2c8-42c9d63814a1"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="24" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Relatório de Mapas da Litoteca]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="10" y="9" width="139" height="20" uuid="354cca69-bf12-4116-a461-36552b0d7dae"/>
+				<textElement>
+					<font size="12" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[Lista de Mapas , Gaveta:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="154" y="9" width="100" height="20" uuid="267af3ba-8969-449c-b005-77368353e2c8"/>
+				<textFieldExpression><![CDATA[$P{ConsultaPorGaveta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="2" width="73" height="20" uuid="699fed9c-35fe-4ceb-a2fe-dda4b762adb9"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[TÍTULO	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="83" y="2" width="89" height="20" uuid="257159e6-7d78-4413-90f4-2231f944c40b"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[FOLHA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="187" y="2" width="67" height="20" uuid="79f27c5d-01ca-4532-af77-051648624080"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[ESCALA	]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="486" y="2" width="69" height="20" uuid="11ab8bd2-6524-4191-9c7d-7f7a2fdd7b35"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[GAVETA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="352" y="2" width="32" height="20" uuid="65e1773a-9900-4219-a262-ea90f2701969"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[ANO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="2" width="74" height="20" uuid="9c403d7e-beab-4ab8-804d-af303d4d9c62"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[QTD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="272" y="2" width="71" height="20" uuid="b75501b2-37f8-4c64-97f5-21198e357b8d"/>
+				<textElement>
+					<font size="14"/>
+				</textElement>
+				<text><![CDATA[EDITORA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="34" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="10" width="73" height="20" uuid="c1ac31f1-4df5-4861-a9a5-d7a02ee69f29"/>
+				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="83" y="10" width="89" height="20" uuid="717e4889-47a7-4c24-adbe-ca6fda213f2d"/>
+				<textFieldExpression><![CDATA[$F{folha}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="187" y="10" width="67" height="20" uuid="c5e061ef-7238-49e8-9c74-b3ac4096429a"/>
+				<textFieldExpression><![CDATA[$F{escala}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="489" y="10" width="32" height="20" uuid="c53f8f1f-9254-47e7-9e40-debe45bc302e"/>
+				<textFieldExpression><![CDATA[$F{gaveta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="352" y="10" width="41" height="20" uuid="24e74ed3-730b-4fd4-9ec0-7d6d2fb76daf"/>
+				<textFieldExpression><![CDATA[$F{ano}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="427" y="10" width="33" height="20" uuid="00898f73-98bf-4af0-b6ab-0cfb6a514a69"/>
+				<textFieldExpression><![CDATA[$F{quantidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="272" y="10" width="59" height="20" uuid="a9ce4d8f-1c4b-4c89-a935-bc92a5fffef9"/>
+				<textFieldExpression><![CDATA[$F{editora}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="42" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="489" y="1" width="56" height="20" uuid="3ff11fb5-d270-4bbf-a066-90c98a7746c8"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="445" y="1" width="41" height="20" uuid="74fac634-8780-4e71-ad5c-eceb2e5fe605"/>
+				<text><![CDATA[Página]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="0" y="1" width="172" height="20" uuid="78d08e1d-f632-4eb0-a057-444d99377b8a"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="10" width="100" height="20" uuid="d83c3350-4aaf-44cf-877a-ca2b2cbcabff"/>
+				<textFieldExpression><![CDATA[$P{ConsultaPorGaveta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
