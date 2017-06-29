@@ -74,12 +74,13 @@ public class Mapas implements Serializable {
     @Column(length = 10)
     private String ano;
 
-  @NotNull(message = "O campo GAVETA não pode ser nulo")
+    @NotNull(message = "O campo GAVETA não pode ser nulo")
     @NotBlank(message = "O campo GAVETA deve ser preenchido")
     private String gaveta;
     
-    @Lob
-     private byte[] imagem;
+    @NotNull(message = "O campo IMAGEM não pode ser nulo")
+    @NotBlank(message = "O campo IMAGEM deve ser selecionada")
+    private String imagem;
 
     @NotNull(message = "O campo QUANTIDADE  não pode ser nulo")
     @NotBlank(message = "O campo QUANTIDADE deve ser preenchido")
@@ -165,11 +166,11 @@ public class Mapas implements Serializable {
         this.gaveta = gaveta;
     }
 
-    public byte[] getImagem() {
+    public String getImagem() {
         return imagem;
     }
 
-    public void setImagem(byte[] imagem) {
+    public void setImagem( String imagem) {
         this.imagem = imagem;
     }
 
@@ -250,7 +251,7 @@ public class Mapas implements Serializable {
         if (!Objects.equals(this.codMapa, other.codMapa)) {
             return false;
         }
-        if (!Arrays.equals(this.imagem, other.imagem)) {
+        if (!Objects.equals(this.imagem, other.imagem)) {
             return false;
         }
         return true;

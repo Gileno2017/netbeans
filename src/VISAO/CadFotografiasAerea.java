@@ -782,7 +782,6 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         im.setImagem(ManipulaBuffImage.getImgBytes(image));
         im.setFotos(fotografias);
         imDao.salvarImagemMapas(im);
-
     }
 
     public void exibiImagemLabel(byte[] minhaImg, javax.swing.JLabel label) throws IOException {

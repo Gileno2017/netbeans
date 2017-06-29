@@ -632,7 +632,7 @@
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="carregarImagem" min="-2" pref="85" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="EnviaImagem" linkSize="4" min="-2" pref="76" max="-2" attributes="0"/>
+                      <Component id="zoomImagem" linkSize="4" min="-2" pref="76" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="SalvarMapa" linkSize="4" min="-2" pref="85" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -654,7 +654,7 @@
                           <Component id="novoMapa" linkSize="6" max="32767" attributes="0"/>
                           <Component id="download" linkSize="6" max="32767" attributes="0"/>
                           <Component id="SalvarMapa" linkSize="6" max="32767" attributes="0"/>
-                          <Component id="EnviaImagem" linkSize="6" max="32767" attributes="0"/>
+                          <Component id="zoomImagem" linkSize="6" max="32767" attributes="0"/>
                           <Component id="carregarImagem" linkSize="6" alignment="1" min="-2" pref="81" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
                               <Component id="jB_Sair" linkSize="6" alignment="0" pref="0" max="32767" attributes="0"/>
@@ -678,7 +678,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="carregarImagemActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="EnviaImagem">
+            <Component class="javax.swing.JButton" name="zoomImagem">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                   <Image iconType="3" name="/imagens/pesquisa.png"/>
@@ -686,7 +686,7 @@
                 <Property name="toolTipText" type="java.lang.String" value="Mapas Zoom"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EnviaImagemActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="zoomImagemActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="SalvarMapa">

@@ -8,10 +8,10 @@
     <class>MODELO.ImagemMapas</class>
     <shared-cache-mode>ALL</shared-cache-mode>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://10.3.2.72:5432/ArqMap"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/ArqMap"/>
       <property name="javax.persistence.jdbc.user" value="postgres"/>
       <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
-      <property name="javax.persistence.jdbc.password" value="mapas2017"/>
+      <property name="javax.persistence.jdbc.password" value="Djlennon2017"/>
       <property name="javax.persistence.schema-generation.database.action" value="create"/>
       <property name="javax.persistence.validation.group.pre-persist" value="javax.validation.groups.Default"/>
     </properties>
