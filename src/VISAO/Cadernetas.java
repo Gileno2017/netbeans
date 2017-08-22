@@ -5,7 +5,7 @@
  */
 package VISAO;
 
-import MODELO.CadernetaTableModel;
+import MODELO.TableCaderneta;
 import CONTROLE.CadernetaDao;
 import CONTROLE.JasperReportConnectionFactory;
 import MODELO.Caderneta;
@@ -26,10 +26,10 @@ import net.sf.jasperreports.engine.JRException;
  */
 public class Cadernetas extends javax.swing.JFrame implements Serializable {
 
-    CadernetaTableModel modeloTabela = new CadernetaTableModel();
+    TableCaderneta modeloTabela = new TableCaderneta();
     Long id;
     Caderneta cad;
-    CadernetaTableModel tbm;
+    TableCaderneta tbm;
 
     public Cadernetas() {
 
@@ -778,7 +778,7 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_jM_cadastrarMapasActionPerformed
 
     private void jM_cadastrarfotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastrarfotografiasActionPerformed
-        CadFotografiasAerea fotografias = new CadFotografiasAerea();
+        CadFotografiaAerea fotografias = new CadFotografiaAerea();
         fotografias.setVisible(true);
     }//GEN-LAST:event_jM_cadastrarfotografiasActionPerformed
 
@@ -788,7 +788,7 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_jM_pesquisarMapasActionPerformed
 
     private void jM_pesquisarfotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarfotografiasActionPerformed
-        CadFotografiasAerea fotografias = new CadFotografiasAerea();
+        CadFotografiaAerea fotografias = new CadFotografiaAerea();
         fotografias.setVisible(true);
     }//GEN-LAST:event_jM_pesquisarfotografiasActionPerformed
 
@@ -866,7 +866,7 @@ public class Cadernetas extends javax.swing.JFrame implements Serializable {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Cadernetas().setVisible(true);
-                //adernetaTableModel tm = new CadernetaTableModel();
+                //adernetaTableModel tm = new TableCaderneta();
 
             }
         });

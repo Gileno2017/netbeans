@@ -1,14 +1,13 @@
 package VISAO;
 
-import CONTROLE.FotografiaDao;
-import CONTROLE.ImagemMapasDao;
+import CONTROLE.MapaIndiceDao;
+import CONTROLE.FotografiaAereaDao;
 import CONTROLE.MapasDao;
-import MODELO.Fotografias;
-import MODELO.Mapas;
-import MODELO.MapasTableModel;
-import MODELO.FotografiasTableModel;
-import MODELO.ImagemMapas;
-import MODELO.ManipulaBuffImage;
+import MODELO.CopiaArquivos;
+import MODELO.MapaIndice;
+import MODELO.TableMapaIndice;
+import MODELO.FotografiaAerea;
+import MODELO.TableFotograiaAerea;
 import MODELO.ValidaCamposComNumeros;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -38,74 +37,76 @@ import net.sf.jasperreports.engine.JRException;
  *
  * @author gileno.macedo
  */
-public class CadFotografiasAerea extends javax.swing.JFrame implements Serializable {
+public class CadFotografiaAerea extends javax.swing.JFrame implements Serializable {
 
-    MapasTableModel modeloTabelaMapas = new MapasTableModel();
-    FotografiasTableModel modeTabelaFotografias = new FotografiasTableModel();
-    Mapas mp;
-    Mapas ma;
-    Fotografias fotos;
+    TableMapaIndice modeloTabelaMapaIndice = new TableMapaIndice();
+    TableFotograiaAerea modeloTabelaFotografiaAerea = new TableFotograiaAerea();
 
-    Long idMapa, id;
-    Long idFotografia;
+    MapaIndice mapaIndice;
+    Long idMapaIndice, id;
     ValidaCamposComNumeros validacampos;
     BufferedImage image;
-    File Arquivoselecionado;
+    File fileArquivoselecionado;
     InputStream input;
     BufferedImage imagem;//recebe a imagem da linha selecionada da tabela
-    ListIterator<ImagemMapas> listIterator;
-    ImagemMapas primeiroElemento;
-    List<ImagemMapas> lista;
+    ListIterator<FotografiaAerea> listIterator;
+    FotografiaAerea primeiroElemento, fotoAerea;
+    List<FotografiaAerea> listaFotografiasAereas;
+    String nomeImagemSelecionada, caminhoMapaIndiceBD, caminhoImagemCapturada;
+    File fileDestino;
 
     /**
      * Creates new form CadFotografias
      */
-    public CadFotografiasAerea() {
+    public CadFotografiaAerea() {
         initComponents();
         setLocationRelativeTo(null);
-        totalMapa();
+        totalFotografiaAerea();
+        totalMapaIndice();
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public void pesquisaPorFoha() {
-        modeloTabelaMapas.consultaMapaPorNome(pesquisasDemapas.getText().toUpperCase());
+        modeloTabelaMapaIndice.consultaMapaIndicePorNome(pesquisasDemapas.getText().toUpperCase());
     }
 
-    public void linhaSelecionadaTableMapas() {
-        mp = modeloTabelaMapas.getLinhaMapas(tabela.getSelectedRow());
-        idMapa = mp.getCodMapa();
-        folha.setText(mp.getFolha());
-        escala.setText(mp.getEscala());
+    public void linhaSelecionadaTableMapaIndice() throws IOException {
+        mapaIndice = modeloTabelaMapaIndice.getLinhaMapaIndice(tabelaMapaIndice.getSelectedRow());
+        idMapaIndice = mapaIndice.getCod_MapaIndice();
+        folha.setText(mapaIndice.getFolhaFotografia());
+        escala.setText(mapaIndice.getEscala());
+        orgaoExecutor.setText(mapaIndice.getOrgaoExecutor());
+        escala.setEditable(false);
+        folha.setEditable(false);
+        orgaoExecutor.setEditable(false);
+        caminhoMapaIndiceBD = mapaIndice.getCaminhoMapaIndeceBD();
+        String caminhoImagemSalva = mapaIndice.getCaminhoMapaIndeceBD();        
+        imagemMapa.setIcon(redimencionaImagem2(caminhoImagemSalva));
+    }
+
+    public void linhaSelecionadaTableFotografiaAerea() throws IOException {
+        fotoAerea = modeloTabelaFotografiaAerea.getLinhaFotografiaAerea(tabelaFotografiaAerea.getSelectedRow());
+        idMapaIndice = mapaIndice.getCod_MapaIndice();
+        mapaIndice.getMapas().getCodMapa();
+        numeroInicial.setText(fotoAerea.getNumeroImagem());
+        caixaLocalização.setText(fotoAerea.getLocalArmazenado());        
+        folha.setText(String.valueOf(fotoAerea.getMpIndiceImagem().getFolhaFotografia()));
+        escala.setText(String.valueOf(fotoAerea.getMpIndiceImagem().getEscala()));
+        orgaoExecutor.setText(mapaIndice.getOrgaoExecutor());
+        imagemMapa.setIcon(redimencionaImagem2(fotoAerea.getImagemFotografiaAerea()));
+
+        FotografiaAereaDao fotografiaAereaDao = new FotografiaAereaDao();// cria um novo objeto da class imagemMapasDao
+        listaFotografiasAereas = fotografiaAereaDao.consultaImagensPorFotografiaAerea(idMapaIndice);// traz os objetos contidos no banco de dados
+
+        listIterator = listaFotografiasAereas.listIterator();
+        listIterator.next();
+        primeiroElemento = listaFotografiasAereas.get(listIterator.nextIndex() + 1);
+        String mapaCapiturado = primeiroElemento.getImagemFotografiaAerea();
+        JOptionPane.showMessageDialog(null, mapaCapiturado);
+       
         folha.setEditable(false);
         escala.setEditable(false);
-    }
 
-    /**
-     * 2 *metodo responsável por capiturar os valores da tabela e inserir no
-     * Jlabels 3 * 4 * 5
-     */
-    public void linhaSelecionadaTableFotografias() throws IOException {
-        fotos = modeTabelaFotografias.getLinhaFotografias(tabelaFotografias.getSelectedRow());
-        idFotografia = fotos.getCod_Fotografia();
-        idMapa = fotos.getMapas().getCodMapa();
-        fotos.getMapas().getCodMapa();
-        folha.setText(String.valueOf(fotos.getMapas().getFolha()));
-        escala.setText(String.valueOf(fotos.getMapas().getEscala()));
-        numeroInicial.setText(String.valueOf(fotos.getCodInical()));
-        numeroFinal.setText(String.valueOf(fotos.getCodFinal()));
-        orgaoExecutor.setText(fotos.getOrgaoExecutor());
-        totalfoto.setText(String.valueOf(fotos.getTotaFotografias()));
-        caixaLocalização.setText(String.valueOf(fotos.getLocalArmazenado()));
-
-        ImagemMapas imagem = new ImagemMapas();// cria  um novo objeto da class imagemmapas
-        ImagemMapasDao imDao = new ImagemMapasDao();// cria um novo objeto da class imagemMapasDao
-        lista = imDao.consultaImagensPorFotografias(idFotografia);// traz os objetos contido no banco de dados
-        listIterator = lista.listIterator();
-        listIterator.next();
-        primeiroElemento = lista.get(listIterator.nextIndex() - 1);
-        exibiImagemLabel(primeiroElemento.getImagem(), imagemLabel);    
-        folha.setEditable(false);                
-        escala.setEditable(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -114,9 +115,9 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tabelaFotografias = new javax.swing.JTable();
+        tabelaFotografiaAerea = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tabela = new javax.swing.JTable();
+        tabelaMapaIndice = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         folha = new javax.swing.JTextField();
         numeroInicial = new javax.swing.JTextField();
@@ -128,10 +129,6 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         escala = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        totalfoto = new javax.swing.JTextField();
-        numeroFinal = new javax.swing.JTextField();
-        jLabel7 = new javax.swing.JLabel();
         jPanel5 = new javax.swing.JPanel();
         pesquisasDemapas = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
@@ -147,8 +144,8 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         totalMapas = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        imagemLabel = new javax.swing.JLabel();
+        totalfotografiaAerea = new javax.swing.JLabel();
+        imagemMapa = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jM_cadastrarMapas = new javax.swing.JMenuItem();
@@ -167,27 +164,27 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Cadastros de Fotografias Aérea");
+        setTitle("Cadastros de Imagens Aérea");
         setResizable(false);
 
         jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 2, true));
 
-        tabelaFotografias.setModel(modeTabelaFotografias);
-        tabelaFotografias.addMouseListener(new java.awt.event.MouseAdapter() {
+        tabelaFotografiaAerea.setModel(modeloTabelaFotografiaAerea);
+        tabelaFotografiaAerea.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tabelaFotografiasMouseClicked(evt);
+                tabelaFotografiaAereaMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tabelaFotografias);
+        jScrollPane1.setViewportView(tabelaFotografiaAerea);
 
-        tabela.setModel(modeloTabelaMapas
+        tabelaMapaIndice.setModel(modeloTabelaMapaIndice
         );
-        tabela.addMouseListener(new java.awt.event.MouseAdapter() {
+        tabelaMapaIndice.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tabelaMouseClicked(evt);
+                tabelaMapaIndiceMouseClicked(evt);
             }
         });
-        jScrollPane2.setViewportView(tabela);
+        jScrollPane2.setViewportView(tabelaMapaIndice);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -195,9 +192,9 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 534, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 577, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 597, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -205,7 +202,7 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE)
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -218,15 +215,17 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         numeroInicial.setFont(new java.awt.Font("Tahoma", 0, 14));
         numeroInicial.setToolTipText("Inserir somente números");
 
+        orgaoExecutor.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         orgaoExecutor.setToolTipText("Inserir somente  letras e /");
 
         caixaLocalização.setToolTipText("Insergir somente números");
+        caixaLocalização.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel1.setText("Folha:");
+        jLabel1.setText("Mapa Índice:");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Código Inicial:");
+        jLabel2.setText("Numero:");
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Executor:");
@@ -237,18 +236,8 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel5.setText("Escala:");
 
+        escala.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         escala.setToolTipText("Campo Não Editável");
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel6.setText("Total: ");
-
-        totalfoto.setToolTipText("Inserir somente números");
-
-        numeroFinal.setFont(new java.awt.Font("Tahoma", 0, 14));
-        numeroFinal.setToolTipText("Inserir somente números");
-
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel7.setText("Código Final:");
 
         jPanel5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 2, true));
 
@@ -263,10 +252,7 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(pesquisasDemapas, javax.swing.GroupLayout.PREFERRED_SIZE, 427, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(pesquisasDemapas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 397, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,43 +278,34 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel3))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(numeroInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(numeroFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(21, 21, 21)
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(totalfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(folha)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(orgaoExecutor, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(caixaLocalização, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(escala, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(pesquisarMapa, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(31, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(95, 95, 95)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 431, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(caixaLocalização, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel2)
+                                .addComponent(jLabel1)
+                                .addComponent(jLabel3))
+                            .addComponent(pesquisarMapa, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(numeroInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel4))
+                            .addComponent(orgaoExecutor, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(escala, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(folha, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -344,29 +321,16 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(folha, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1))
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(23, 23, 23)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(totalfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel6)))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(numeroInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel2))
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(numeroFinal, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel7)))))
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(orgaoExecutor, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel3))
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(caixaLocalização, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jLabel4)))
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(numeroInicial, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel4)
+                            .addComponent(caixaLocalização, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(21, 21, 21)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(orgaoExecutor, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(escala, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -376,6 +340,9 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
                 .addContainerGap())
         );
 
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {caixaLocalização, numeroInicial});
+
+        jP_Botoes.setBackground(new java.awt.Color(130, 60, 122));
         jP_Botoes.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 2, true));
 
         jB_salvarFotografias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/save_14706.png"))); // NOI18N
@@ -430,56 +397,65 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
             .addGroup(jP_BotoesLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jP_BotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jP_BotoesLayout.createSequentialGroup()
-                        .addComponent(anterior, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jP_BotoesLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(anterior, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jb_proximo, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jP_BotoesLayout.createSequentialGroup()
                         .addGroup(jP_BotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jB_salvarFotografias)
+                            .addComponent(bt_imagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(adicionarImagens, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bt_imagem, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(adicionarImagens, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
         jP_BotoesLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {adicionarImagens, bt_imagem, jButton1});
 
+        jP_BotoesLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {anterior, jb_proximo});
+
         jP_BotoesLayout.setVerticalGroup(
             jP_BotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jP_BotoesLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
                 .addGroup(jP_BotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(anterior, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jb_proximo, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(adicionarImagens, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(12, 12, 12)
                 .addComponent(bt_imagem, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jB_salvarFotografias, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jB_salvarFotografias, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jP_BotoesLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {adicionarImagens, anterior, jb_proximo});
+        jP_BotoesLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {adicionarImagens, anterior, jButton1, jb_proximo});
 
         jP_BotoesLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {bt_imagem, jB_salvarFotografias});
 
         jPanel4.setBackground(new java.awt.Color(130, 60, 122));
+        jPanel4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 2, true));
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel8.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel8.setText("Fotográfias Cadastradas");
+        jLabel8.setText("Imagem Aerea ");
 
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel9.setText("Mapas Cadastrados");
+        jLabel9.setText("Mapa Índice ");
 
         totalMapas.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         totalMapas.setForeground(new java.awt.Color(255, 255, 255));
         totalMapas.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+
+        totalfotografiaAerea.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        totalfotografiaAerea.setForeground(new java.awt.Color(255, 255, 255));
+        totalfotografiaAerea.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -487,10 +463,12 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(349, 349, 349)
-                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(totalfotografiaAerea, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(84, 84, 84)
+                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(327, 327, 327)
                 .addComponent(totalMapas, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -498,31 +476,15 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(totalfotografiaAerea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
             .addComponent(totalMapas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Imagem", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12), new java.awt.Color(102, 0, 102))); // NOI18N
-
-        imagemLabel.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 2, true));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(imagemLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 450, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(imagemLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        imagemMapa.setBorder(javax.swing.BorderFactory.createTitledBorder("Imagens Aereas"));
 
         jMenu2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/computer.png"))); // NOI18N
         jMenu2.setToolTipText("Cadastrar Dados");
@@ -653,29 +615,31 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
             .addGroup(layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(imagemMapa, javax.swing.GroupLayout.PREFERRED_SIZE, 527, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
                         .addComponent(jP_Botoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(19, 19, 19)
+                        .addGap(18, 18, 18)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jP_Botoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(imagemMapa, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jP_Botoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(13, 13, 13)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
+                .addGap(51, 51, 51))
         );
 
         pack();
@@ -685,149 +649,163 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         if (pesquisasDemapas.getText().equals("")) {
             JOptionPane.showMessageDialog(null, "Informe a Folha para Efetuar a Pesquisa !");
         } else {
-            pesquisaPorFoha();
+            // pesquisaPorFoha();
             pesquisasDemapas.setText("");
         }
     }//GEN-LAST:event_pesquisarMapaActionPerformed
 
-    public void salvarFotos() throws Exception {
-        Fotografias fotografias = new Fotografias();
-        Mapas mapas = new Mapas();
-        mapas.setCodMapa(idMapa);
-        ImagemMapas imp = new ImagemMapas();
-        imp.setImagem(ManipulaBuffImage.getImgBytes(image));
-        mapas.setFolha(folha.getText());
-        mapas.setEscala(escala.getText());
-        fotografias.setCod_Fotografia(idFotografia);
-        fotografias.setTotaFotografias(totalfoto.getText());
-        fotografias.setCodInical(numeroInicial.getText());
-        fotografias.setCodFinal(numeroFinal.getText());
-        fotografias.setLocalArmazenado(caixaLocalização.getText());
-        fotografias.setOrgaoExecutor(orgaoExecutor.getText().toUpperCase());
-        fotografias.setMapas(mapas);
-        imp.setFotos(fotografias);
+    public void salvarFotografiaAerea() throws Exception {
+        FotografiaAerea fotografiaAerea = new FotografiaAerea();
+        MapaIndice mapIndice = new MapaIndice();
+        mapIndice.setCod_MapaIndice(idMapaIndice);
+        mapIndice.setCaminhoMapaIndeceBD(caminhoMapaIndiceBD);        
+        fotografiaAerea.setImagemFotografiaAerea(caminhoMapaIndiceBD + nomeImagemSelecionada+"\\"+nomeImagemSelecionada);
+        fotografiaAerea.setNumeroImagem(numeroInicial.getText().toUpperCase());
+        fotografiaAerea.setLocalArmazenado(caixaLocalização.getText().toUpperCase());
+        fotografiaAerea.setMpIndiceImagem(mapIndice);
+
         //metodo responsavel por validar os campos na bean.mapas
         ValidatorFactory validaFotos = Validation.buildDefaultValidatorFactory();
         Validator validador = validaFotos.getValidator();
-        Set<ConstraintViolation<Fotografias>> Alerta = validador.validate(fotografias);
+        Set<ConstraintViolation<FotografiaAerea>> Alerta = validador.validate(fotografiaAerea);
         if (Alerta.size() > 0) {
-            for (ConstraintViolation< Fotografias> error : Alerta) {
+            for (ConstraintViolation< FotografiaAerea> error : Alerta) {
                 JOptionPane.showMessageDialog(null, error.getMessage());
             }
         } else {
+            CopiaArquivos copy = new CopiaArquivos();
+            copy.copiaArquivo(fileArquivoselecionado, nomeImagemSelecionada, caminhoMapaIndiceBD);//copia a imagem selecionada para uma pasta no servidor de arquivos
+
             //Envia os dados do mapa para a tabela e salva no banco de dados            
-            modeTabelaFotografias.salvaFotografias(fotografias);
-            ImagemMapasDao imDao = new ImagemMapasDao();
-            imDao.salvarImagemMapas(imp);
-            modeTabelaFotografias.atualizaListadeFotos(fotos);
-            limpaCampos();
+            modeloTabelaFotografiaAerea.salvaFotografiaAerea(fotografiaAerea);
+            FotografiaAereaDao imDao = new FotografiaAereaDao();
+            imDao.salvarImagemMapas(fotografiaAerea);
+            modeloTabelaFotografiaAerea.atualizaListadeFotografiaAerea(fotografiaAerea);
+            numeroInicial.setText("");
+            caixaLocalização.setText("");
+            imagemMapa.setIcon(null);
         }
     }
 
     public void removerFotografias() {
-        FotografiaDao fotografiaDao = new FotografiaDao();
-        fotografiaDao.removeFotografias(idFotografia);
-        modeTabelaFotografias.removeFotografia(fotos);
+        MapaIndiceDao fotografiaDao = new MapaIndiceDao();
+        fotografiaDao.removeMapaIndice(idMapaIndice);
+        modeloTabelaFotografiaAerea.removeFotografiaAerea(fotoAerea);
     }
 
     public void limpaCampos() {
         folha.setText("");
         escala.setText("");
         numeroInicial.setText("");
-        numeroFinal.setText("");
-        totalfoto.setText("");
         orgaoExecutor.setText("");
         caixaLocalização.setText("");
-        imagemLabel.setIcon(null);
+        imagemMapa.setIcon(null);
     }
 
-    public void totalMapa() {
-        MapasDao mDao = new MapasDao();
-        int total = mDao.getMapasCount();
-        totalMapas.setText(String.valueOf(total));
+    private void totalFotografiaAerea() {
+        FotografiaAereaDao fotografiaAereaDao = new FotografiaAereaDao();
+        int totalFotografiasAereas = fotografiaAereaDao.getImagemMapasCount();
+        totalfotografiaAerea.setText(String.valueOf(totalFotografiasAereas));
 
     }
+
+    private void totalMapaIndice() {
+        MapaIndiceDao mapaIndiceDao = new MapaIndiceDao();
+        int totalMapaIndice = mapaIndiceDao.getMapaIndiceCount();
+        totalMapas.setText(String.valueOf(totalMapaIndice));
+    }
+
 /////////////////////////////////////////// METODOS RESPONSAVEIS POR ARQUIVAR A  IMAGEM NA PASTA  /////////////////////////////////////////////////////////////////////
-
-    public void carregaImagem() throws IOException {
-        JFileChooser file = new JFileChooser("c:\\");
-        file.setDialogTitle("Upload de Imagem");
+    public void carregaImagem() throws IOException, Exception {
+        JFileChooser fileChooser = new JFileChooser("c:\\");
+        fileChooser.setDialogTitle("Upload de Imagem");
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);//captura somente pastas
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.imagem", "jpg", "gif", "png");
-        file.addChoosableFileFilter(filtro);
-        int resultado = file.showSaveDialog(null);
+        fileChooser.addChoosableFileFilter(filtro);
+        int resultado = fileChooser.showSaveDialog(null);
         if (resultado == JFileChooser.APPROVE_OPTION) {
-            Arquivoselecionado = file.getSelectedFile();
-            String path = Arquivoselecionado.getAbsolutePath();
-            imagemLabel.setIcon(redimencionaImagem(path));
+            fileArquivoselecionado = fileChooser.getSelectedFile();//seleciona a imagem na pasta
+            caminhoImagemCapturada = fileArquivoselecionado.getAbsolutePath();// pega o caminho da imagem
+            nomeImagemSelecionada = fileChooser.getSelectedFile().getName();// captura o nome da imagem na pasta
+            imagemMapa.setIcon(redimencionaImagem(caminhoImagemCapturada));// exibe a imagem na label (tela)
+
         } else if (resultado == JFileChooser.CANCEL_OPTION) {
             JOptionPane.showMessageDialog(null, "Arquivo não selecionado");
         }
+    }
 
+    private ImageIcon redimencionaImagem2(String ImagePath) throws IOException {
+        ImageIcon minhaImagem = new ImageIcon(ImagePath);
+        Image img = minhaImagem.getImage();
+        Image novaImagem = img.getScaledInstance(imagemMapa.getWidth(), imagemMapa.getHeight(), Image.SCALE_REPLICATE);
+        ImageIcon im = new ImageIcon(novaImagem);
+        return im;
     }
 
     private ImageIcon redimencionaImagem(String ImagePath) throws IOException {
         ImageIcon minhaImagem = new ImageIcon(ImagePath);
         Image img = minhaImagem.getImage();
-        Image novaImagem = img.getScaledInstance(imagemLabel.getWidth(), imagemLabel.getHeight(), Image.SCALE_REPLICATE);
+        Image novaImagem = img.getScaledInstance(imagemMapa.getWidth(), imagemMapa.getHeight(), Image.SCALE_REPLICATE);
         ImageIcon im = new ImageIcon(novaImagem);
-        image = ImageIO.read(Arquivoselecionado);
+        image = ImageIO.read(fileArquivoselecionado);
         return im;
     }
 
+    //METODO RESPONSÁVEL POR ADD MAIS IMAGENS A FOTOGRAFIA AEREA
     public void SalvarImagem() throws Exception {
-        ImagemMapasDao imDao = new ImagemMapasDao();
-        ImagemMapas im = new ImagemMapas();
-        Fotografias fotografias = new Fotografias();
-        fotografias.setCod_Fotografia(idFotografia);
-        im.setImagem(ManipulaBuffImage.getImgBytes(image));
-        im.setFotos(fotografias);
-        imDao.salvarImagemMapas(im);
+        String caminho = mapaIndice.getCaminhoMapaIndeceBD();
+        JOptionPane.showMessageDialog(null, "caminho imagem banco " + caminho);
+        FotografiaAereaDao fotoAereaDao = new FotografiaAereaDao();
+        FotografiaAerea fotografiaAerea = new FotografiaAerea();
+        MapaIndice fotografias = new MapaIndice();
+        fotografias.setCod_MapaIndice(idMapaIndice);
+        carregaImagem();
+        CopiaArquivos copiaArquivos = new CopiaArquivos();
+       // copiaArquivos.addUmArquivo(fileArquivoselecionado, nomeImagemSelecionada, caminho);
+        fotografiaAerea.setImagemFotografiaAerea(caminho + "\\" + nomeImagemSelecionada);
+        fotografiaAerea.setMpIndiceImagem(fotografias);
+        fotoAereaDao.salvarImagemMapas(fotografiaAerea);
     }
 
     public void exibiImagemLabel(byte[] minhaImg, javax.swing.JLabel label) throws IOException {
         //primeiro verifica se tem a imagem
         //se tem convert para inputstream que é o formato reconhecido pelo ImageIO
-
         if (minhaImg != null) {
             input = new ByteArrayInputStream(minhaImg);
             imagem = ImageIO.read(input);
             ImageIcon minhaImagem = new ImageIcon(imagem);
             Image img = minhaImagem.getImage();
-            Image novaImagem = img.getScaledInstance(imagemLabel.getWidth(), imagemLabel.getHeight(), Image.SCALE_REPLICATE);
+            Image novaImagem = img.getScaledInstance(imagemMapa.getWidth(), imagemMapa.getHeight(), Image.SCALE_REPLICATE);
             label.setIcon(new ImageIcon(novaImagem));
         } else {
             label.setIcon(null);
         }
-
     }
-    private void pesquisasDemapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesquisasDemapasActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pesquisasDemapasActionPerformed
 
-    private void tabelaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaMouseClicked
-        linhaSelecionadaTableMapas();
-    }//GEN-LAST:event_tabelaMouseClicked
+    private void pesquisasDemapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pesquisasDemapasActionPerformed
+
+    }//GEN-LAST:event_pesquisasDemapasActionPerformed
 
     private void jB_salvarFotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jB_salvarFotografiasActionPerformed
         try {
-            salvarFotos();
-
+            salvarFotografiaAerea();
         } catch (Exception ex) {
-            Logger.getLogger(CadFotografiasAerea.class
+            Logger.getLogger(CadFotografiaAerea.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-
     }//GEN-LAST:event_jB_salvarFotografiasActionPerformed
 
-    private void tabelaFotografiasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaFotografiasMouseClicked
-        try {
-            linhaSelecionadaTableFotografias();
 
+    private void tabelaFotografiaAereaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaFotografiaAereaMouseClicked
+
+        try {
+            linhaSelecionadaTableFotografiaAerea();
         } catch (IOException ex) {
-            Logger.getLogger(CadFotografiasAerea.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CadFotografiaAerea.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_tabelaFotografiasMouseClicked
+
+
+    }//GEN-LAST:event_tabelaFotografiaAereaMouseClicked
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         removerFotografias();
@@ -837,50 +815,49 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
     private void bt_imagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_imagemActionPerformed
         try {
             carregaImagem();
-
-        } catch (IOException ex) {
-            Logger.getLogger(CadFotografiasAerea.class
-                    .getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(CadFotografiaAerea.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_bt_imagemActionPerformed
 
     private void adicionarImagensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adicionarImagensActionPerformed
         try {
             SalvarImagem();
-            imagemLabel.setIcon(null);
-
+            imagemMapa.setIcon(null);
         } catch (Exception ex) {
-            Logger.getLogger(CadFotografiasAerea.class
+            Logger.getLogger(CadFotografiaAerea.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_adicionarImagensActionPerformed
 
     private void jb_proximoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jb_proximoActionPerformed
-      if (listIterator.hasNext()) {
-            primeiroElemento = (ImagemMapas) listIterator.next(); 
-           
-          try {  
-              exibiImagemLabel(primeiroElemento.getImagem(), imagemLabel);
-          } catch (IOException ex) {
-              Logger.getLogger(CadFotografiasAerea.class.getName()).log(Level.SEVERE, null, ex);
-          }
-          
-               }
-        
-        
-       
+        if (listIterator.hasNext()) {
+            primeiroElemento = (FotografiaAerea) listIterator.next();
+            String mapaCapiturado = primeiroElemento.getImagemFotografiaAerea();
+
+            try {
+                imagemMapa.setIcon(redimencionaImagem2(mapaCapiturado));
+
+            } catch (IOException ex) {
+                Logger.getLogger(CadFotografiaAerea.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jb_proximoActionPerformed
 
+
     private void anteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anteriorActionPerformed
-          if (listIterator.hasPrevious()) {
-            primeiroElemento = (ImagemMapas) listIterator.previous();            
-          try {  
-              exibiImagemLabel(primeiroElemento.getImagem(), imagemLabel);
-          } catch (IOException ex) {
-              Logger.getLogger(CadFotografiasAerea.class.getName()).log(Level.SEVERE, null, ex);
-          }
+        if (listIterator.hasPrevious()) {
+            primeiroElemento = (FotografiaAerea) listIterator.previous();
+            String mapaCapiturado = primeiroElemento.getImagemFotografiaAerea();
+            //  String nomeImagem = primeiroElemento.getMpIndiceImagem().getMapas().getCaminho();
+            try {
+                imagemMapa.setIcon(redimencionaImagem2(mapaCapiturado));
+
+            } catch (IOException ex) {
+                Logger.getLogger(CadFotografiaAerea.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        
+
     }//GEN-LAST:event_anteriorActionPerformed
 
     private void jM_pesquisarMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarMapasActionPerformed
@@ -943,11 +920,19 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
+    private void tabelaMapaIndiceMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaMapaIndiceMouseClicked
+        try {
+            linhaSelecionadaTableMapaIndice();
+        } catch (IOException ex) {
+            Logger.getLogger(CadFotografiaAerea.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_tabelaMapaIndiceMouseClicked
+
     public static void main(String args[]) {
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CadFotografiasAerea().setVisible(true);
+                new CadFotografiaAerea().setVisible(true);
             }
         });
     }
@@ -959,7 +944,7 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
     private javax.swing.JTextField caixaLocalização;
     private javax.swing.JTextField escala;
     private javax.swing.JTextField folha;
-    private javax.swing.JLabel imagemLabel;
+    private javax.swing.JLabel imagemMapa;
     private javax.swing.JButton jB_salvarFotografias;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -968,8 +953,6 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenuItem jM_ConsultaPorGaveta;
@@ -990,21 +973,19 @@ public class CadFotografiasAerea extends javax.swing.JFrame implements Serializa
     private javax.swing.JPanel jP_Botoes;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JButton jb_proximo;
-    private javax.swing.JTextField numeroFinal;
     private javax.swing.JTextField numeroInicial;
     private javax.swing.JTextField orgaoExecutor;
     private javax.swing.JButton pesquisarMapa;
     private javax.swing.JTextField pesquisasDemapas;
-    private javax.swing.JTable tabela;
-    private javax.swing.JTable tabelaFotografias;
+    private javax.swing.JTable tabelaFotografiaAerea;
+    private javax.swing.JTable tabelaMapaIndice;
     private javax.swing.JLabel totalMapas;
-    private javax.swing.JTextField totalfoto;
+    private javax.swing.JLabel totalfotografiaAerea;
     // End of variables declaration//GEN-END:variables
 }

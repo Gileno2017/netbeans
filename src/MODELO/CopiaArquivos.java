@@ -1,13 +1,12 @@
 package MODELO;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 import javax.swing.JOptionPane;
 
@@ -45,7 +44,7 @@ public class CopiaArquivos {
      * @throws IOException, UnsupportedOperationException
      */
     public void copyAll(File origem, File destino, String extensao, boolean overwrite) throws IOException, UnsupportedOperationException {
-        destino.mkdir();
+
         if (!destino.exists()) {
             destino.mkdir();
         }
@@ -58,7 +57,7 @@ public class CopiaArquivos {
         File[] files = origem.listFiles();
         for (int i = 0; i < files.length; ++i) {
             if (files[i].isDirectory()) {
-                //    copyAll(files[i], new File(destino + "\\" + files[i].getName()), overwrite);
+                copyAll(files[i], new File(destino + "\\" + files[i].getName()), overwrite);
             } else if (files[i].getName().endsWith(extensao)) {
                 copy(files[i], new File(destino + "\\" + files[i].getName()), overwrite);
             }
@@ -75,21 +74,143 @@ public class CopiaArquivos {
      */
     public void copyAll(File origem, File destino, boolean overwrite) throws IOException, UnsupportedOperationException {
         String arquivos = null;
+        if (!destino.isDirectory()) {
+
+        }
         if (!destino.exists()) {
             destino.mkdir();
         }
-       
-        
+
         File[] files = origem.listFiles();
         for (int i = 0; i < files.length; ++i) {
             if (files[i].isDirectory()) {
                 copyAll(files[i], new File(destino + "\\" + files[i].getName()), overwrite);
+
             } else {
                 arquivos = " " + files[i].getName();
                 copy(files[i], new File(destino + "\\" + files[i].getName()), overwrite);
+
             }
+
+            /// JOptionPane.showMessageDialog(null, " Arquivos!!" + files[i]);
         }
-        JOptionPane.showMessageDialog(null, " Concluido com Sucesso!!" + arquivos);
     }
 
+    public void copiaArquivo(File ImgSelecionada, String nomeImagem, String caminhoImagem) throws IOException {
+
+        FileInputStream origem;
+        FileOutputStream destino;
+        FileChannel fcOrigem;
+        FileChannel fcDestino;
+        File novoDiretorio = new File(caminhoImagem + nomeImagem);
+
+        if (!novoDiretorio.exists()) {
+            if (novoDiretorio.mkdir()) {; //cria o diretório "caelum-copia" e o diretório "Java" dentro da pasta /home/
+                JOptionPane.showMessageDialog(null, "Novo diretorio criado em " + novoDiretorio.getAbsolutePath());
+
+                origem = new FileInputStream(ImgSelecionada);//arquivo que você quer copiar
+                destino = new FileOutputStream(novoDiretorio + "\\" + nomeImagem);//onde irá ficar a copia do aquivo
+                fcOrigem = origem.getChannel();
+                fcDestino = destino.getChannel();
+                fcOrigem.transferTo(0, fcOrigem.size(), fcDestino);//copiando o arquivo e salvando no diretório que você escolheu
+                JOptionPane.showMessageDialog(null, "Arquivo copiado " + nomeImagem + " para " + novoDiretorio.getAbsolutePath());
+                origem.close();
+                destino.close();
+            }
+
+        }
+
+    }
+
+    public void copiaFotografiaAerea(File ImgSelecionada, String nomeImagem, String caminhoImagem) throws IOException {
+
+        FileInputStream origem;
+        FileOutputStream destino;
+        FileChannel fcOrigem;
+        FileChannel fcDestino;
+
+        File novoDiretorio = new File(caminhoImagem + nomeImagem);
+
+        if (!novoDiretorio.exists()) {
+            if (novoDiretorio.mkdir()) {; //cria o diretório "caelum-copia" e o diretório "Java" dentro da pasta /home/
+                JOptionPane.showMessageDialog(null, "Novo diretorio criado em " + novoDiretorio.getAbsolutePath());
+
+                origem = new FileInputStream(ImgSelecionada);//arquivo que você quer copiar
+                destino = new FileOutputStream(novoDiretorio + "\\" + nomeImagem);//onde irá ficar a copia do aquivo
+                fcOrigem = origem.getChannel();
+                fcDestino = destino.getChannel();
+                fcOrigem.transferTo(0, fcOrigem.size(), fcDestino);//copiando o arquivo e salvando no diretório que você escolheu
+                JOptionPane.showMessageDialog(null, "Arquivo copiado " + nomeImagem + " para " + novoDiretorio.getAbsolutePath());
+                origem.close();
+                destino.close();
+            }
+
+        }
+
+    }
+
+    public void addUmArquivo(File ImgSelecionada, String nomeImagem, String caminhoBD) throws IOException {
+
+        FileInputStream origem;
+        FileOutputStream destino;
+        FileChannel fcOrigem;
+        FileChannel fcDestino;
+
+        origem = new FileInputStream(ImgSelecionada);//arquivo que você quer copiar
+        destino = new FileOutputStream(caminhoBD + "\\" + nomeImagem);//onde irá ficar a copia do aquivo
+        fcOrigem = origem.getChannel();
+        fcDestino = destino.getChannel();
+
+        origem.close();
+        destino.close();
+    }
+
+    public void copia(String caminho, File selecionado) throws FileNotFoundException, IOException {
+        FileInputStream origem;
+        FileOutputStream destino;
+        FileChannel fcOrigem;
+        FileChannel fcDestino;
+
+        File novaPasta = new File(caminho);
+        if (!novaPasta.exists()) {
+            if (novaPasta.mkdir()) {
+                System.out.println("Directory is created!");
+                origem = new FileInputStream(selecionado);//arquivo que você quer copiar
+                destino = new FileOutputStream(novaPasta);//onde irá ficar a copia do aquivo          
+                fcOrigem = origem.getChannel();
+                fcDestino = destino.getChannel();
+                fcOrigem.transferTo(0, fcOrigem.size(), fcDestino);//copiando o arquivo e salvando no diretório que você escolheu
+                origem.close();
+                destino.close();
+                JOptionPane.showMessageDialog(null, "Copiado com sucesso" + destino);
+            } else {
+                System.out.println("Failed to create directory!");
+            }
+        }
+    }
+
+    public void copyFileUsingStream(File source) throws IOException {
+        InputStream is = null;
+        OutputStream os = null;
+        String nomeArquivo = source.getName();
+        File pastaDestino = new File("d:pastaDestino");
+        if (!pastaDestino.exists()) {
+
+            if (pastaDestino.mkdir()) {;
+                try {
+
+                    is = new FileInputStream(source);
+                    os = new FileOutputStream(pastaDestino + "\\" + nomeArquivo);
+                    byte[] buffer = new byte[1024];
+                    int length;
+                    while ((length = is.read(buffer)) > 0) {
+                        os.write(buffer, 0, length);
+                    }
+                } finally {
+                    is.close();
+                    os.close();
+                }
+            }
+        }
+    }
 }

@@ -7,10 +7,10 @@ package VISAO;
 
 import CONTROLE.JasperReportConnectionFactory;
 import CONTROLE.MapasDao;
-import MODELO.CadernetaTableModel;
+import MODELO.TableCaderneta;
 import MODELO.CopiaArquivos;
 import MODELO.Mapas;
-import MODELO.MapasTableModel;
+import MODELO.TableMapas;
 import MODELO.ReportUtils;
 import java.awt.Cursor;
 import java.awt.Image;
@@ -42,17 +42,18 @@ import net.sf.jasperreports.engine.JRException;
  */
 public class CadMapa extends javax.swing.JFrame implements Serializable {
 
-    MapasTableModel modeloTabela = new MapasTableModel();
+    TableMapas modeloTabela = new TableMapas();
     Mapas mp;
-    BufferedImage bufferedImage2;// recebe a imagem selecionada da pasta
+
     File fileArquivoselecionado;
     File fileDestino;
     Long id;
-    CadernetaTableModel tbm;
+    TableCaderneta tbm;
     InputStream inputStreamImage;
     BufferedImage bufferedImagem;//recebe a imagem da linha selecionada da tabela
     String caminhoImagem;
     String nomeImagemSelecionada;
+    String caminho;
 
     public CadMapa() {
         initComponents();
@@ -63,9 +64,26 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
 
     }
 
-    public void Salvar() throws Exception {
+    public void SalvaMapas() throws Exception {
+        File src = new File("") ;
+        //Envia os dados do mapa para a tabela e salva no banco de dados            
+        //seleciona o caminhoPastaCapiturada onde sera capturado a pasta com os mapas
+        JFileChooser chooser = new JFileChooser("c:\\");
+        chooser.setDialogTitle("Deseja altera os arquivos dos mapas? " + titulo.getText());
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//captura somente pastas
+        int res = chooser.showOpenDialog(null);
+        if (res == JFileChooser.APPROVE_OPTION) {
+            String caminhoPastaCapiturada = chooser.getSelectedFile().getAbsolutePath();//caminho da pasta 
+            String nomeImagem = chooser.getSelectedFile().getName();
+            String pastaNoBD = "\\\\serv-arquivo-ma\\GERIDE2\\ARQUIVOS_MAPOTECA";    //caminho onde sera salvo os mapas  no BD        
+            src = new File(caminhoPastaCapiturada);// caminho da imagem para ser copiada
+            fileDestino = new File(pastaNoBD, nomeImagem);
+            
+        }
+        
+        
+          
         Mapas mapas = new Mapas();
-
         mapas.setTitulo(titulo.getText().toUpperCase());
         mapas.setFolha(folha.getText().toUpperCase());
         mapas.setEditora(editora.getText().toUpperCase());
@@ -75,8 +93,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         mapas.setGaveta(gaveta.getSelectedItem().toString().toUpperCase());
         mapas.setQuantidade(quantidade.getSelectedItem().toString().toUpperCase());
         mapas.setHemisferio(hemisferio.getSelectedItem().toString().toUpperCase());
-        mapas.setCaminho(String.valueOf(fileDestino));
         mapas.setImagem(fileDestino + "\\" + nomeImagemSelecionada);
+        mapas.setCaminho(String.valueOf(fileDestino));
 
         //metodo responsavel por validar os campos na bean.mapas
         ValidatorFactory validaMapas = Validation.buildDefaultValidatorFactory();
@@ -88,15 +106,16 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             }
         } else {
             //Envia os dados do mapa para a tabela e salva no banco de dados
+            CopiaArquivos cp = new CopiaArquivos();
+            cp.copyAll(src, fileDestino, true);
             modeloTabela.adicionaMapa(mapas);
-            salvaArquivos();
             limpaCampos();
             totalMapas();
-
+            desabilitaBotoes();
         }
     }
 
-    public void alterarDados() throws Exception {
+    public void alteraMapas() throws Exception {
         Mapas mapas = new Mapas();
         mapas.setCodMapa(id);
         mapas.setTitulo(titulo.getText().toUpperCase());
@@ -125,36 +144,55 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             modeloTabela.atualizaListadeMapa(mp);
             limpaCampos();
             totalMapas();
-
         }
-    }
-
-    public void salvaArquivos() throws IOException, Exception {
-        //seleciona o caminho onde sera capturado a pasta com os mapas
-        JFileChooser chooser = new JFileChooser("c:\\");
-        chooser.setDialogTitle("Upload de Pastas Georeferenciadas");
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//captura somente pastas
-        int res = chooser.showOpenDialog(null);
-
-        if (res == JFileChooser.APPROVE_OPTION) {
-            String caminho = chooser.getSelectedFile().getAbsolutePath();//caminho da pasta 
-            String nomepasta = chooser.getSelectedFile().getName();
-            JOptionPane.showMessageDialog(null, nomepasta);
-            String local = "\\D:\\NovoMapa";    //caminho onde sera salvo os             
-            File src = new File(caminho);
-            fileDestino = new File(local, nomepasta);
-            CopiaArquivos cp = new CopiaArquivos();
-            cp.copyAll(src, fileDestino, true);
+        int resp = JOptionPane.showConfirmDialog(null, "Deseja altera os arquivos dos mapas? " + mapas.getTitulo() + JOptionPane.YES_NO_OPTION);
+        if (resp == JOptionPane.YES_NO_OPTION) {
+            try {
+                File src;
+                //Envia os dados do mapa para a tabela e salva no banco de dados            
+                //seleciona o caminhoPastaCapiturada onde sera capturado a pasta com os mapas
+                JFileChooser chooser = new JFileChooser("c:\\");
+                chooser.setDialogTitle("Upload de Pastas Georeferenciadas do Mapa" + titulo.getText());
+                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//captura somente pastas
+                int res = chooser.showOpenDialog(null);
+                if (res == JFileChooser.APPROVE_OPTION) {
+                    String caminhoImagemCapiturada = chooser.getSelectedFile().getAbsolutePath();//caminho da pasta 
+                    String nomeImagem = chooser.getSelectedFile().getName();
+                    String pastalNoBD = "\\D:\\NovoMapa";    //caminho onde sera salvo os             
+                    src = new File(caminhoImagemCapiturada);
+                    fileDestino = new File(pastalNoBD, nomeImagem);
+                    CopiaArquivos cp = new CopiaArquivos();
+                    cp.copyAll(src, fileDestino, true);
+                }
+                limpaCampos();
+                desabilitaBotoes();
+            } catch (Exception ex) {
+                Logger.getLogger(CadMapa.class
+                        .getName()).log(Level.SEVERE, null, ex);
+            }
         }
-        if (!fileDestino.canWrite()) {
-            JOptionPane.showMessageDialog(null, "O Diretório de destino não pode ser gravado");
-        }
+
     }
 
     public void removerMapas() throws Exception {
         MapasDao mapasDao = new MapasDao();
-        mapasDao.removeMapas(id);        
+        mapasDao.removeMapas(id);
         modeloTabela.removeMapa(mp);
+    }
+
+    public void removePastaMapDir() {
+        String diretorio = mp.getCaminho();
+        File folder = new File(diretorio);
+        if (folder.isDirectory()) {
+            File[] sun = folder.listFiles();
+            for (File toDelete : sun) {
+                toDelete.delete();
+            }
+        }
+        boolean success = (new File(diretorio)).delete();
+        if (!success) {
+            JOptionPane.showMessageDialog(null, "diretorio nao existe");
+        }
     }
 
     public void pesquisaPorFoha() {
@@ -162,7 +200,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
 
     }
 
-    public void carregaImagem() throws IOException {
+    public void carregaImagem() throws IOException, Exception {
         JFileChooser file = new JFileChooser("c:\\");
         file.setDialogTitle("Upload de Imagem");
         FileNameExtensionFilter filtro = new FileNameExtensionFilter("*.imagem", "jpg", "gif", "png");
@@ -173,6 +211,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             String path = fileArquivoselecionado.getAbsolutePath();
             nomeImagemSelecionada = fileArquivoselecionado.getName();
             imagemMapa.setIcon(redimencionaImagem2(path));
+            SalvarMapa.setEnabled(true);
+           
         } else if (resultado == JFileChooser.CANCEL_OPTION) {
             JOptionPane.showMessageDialog(null, "Arquivo não selecionado");
         }
@@ -218,16 +258,28 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         id = null;
     }
 
+    public boolean verificaCampos() {
+        if (titulo != null && folha != null
+                && editora != null && tipo != null
+                && gaveta != null && imagemMapa != null
+                && quantidade != null && escala != null
+                && hemisferio != null && ano != null) {
+        }
+        return true;
+    }
+
     private void desabilitaBotoes() {
         zoomImagem.setEnabled(false);
         download.setEnabled(false);
         Deletar.setEnabled(false);
+        SalvarMapa.setEnabled(false);
     }
 
     private void habilitaBotoes() {
         zoomImagem.setEnabled(true);
         download.setEnabled(true);
         Deletar.setEnabled(true);
+        SalvarMapa.setEnabled(true);
     }
 
     public void totalMapas() {
@@ -251,7 +303,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
 
         MapasDao mDao = new MapasDao();
         Mapas mapas = mDao.consultaMapasId(id);
-        String caminho = mapas.getCaminho();
+        caminho = mapas.getCaminho();
         caminhoImagem = (mapas.getImagem());
         exibiImagemLabel();
         fileDestino = new File(caminho);
@@ -262,7 +314,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     public void dounloadPastas() throws IOException {
         MapasDao mDao = new MapasDao();
         Mapas mps = mDao.consultaMapasId(id);
-        String caminho = mps.getCaminho();
+        String caminhos = mps.getCaminho();
         JFileChooser chooser = new JFileChooser("c:\\");
         chooser.setDialogTitle("Downloads de pastas Georeferenciadas");
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//captura somente pastas
@@ -272,11 +324,13 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             String Titulo = titulo.getText().toUpperCase();
             String Folha = folha.getText().toUpperCase();
             String nome = (Titulo + "_" + Folha);
-            File origem = new File(caminho);
+            File origem = new File(caminhos);
             File downloads = new File(pastadeDownloads, nome);
             CopiaArquivos cp = new CopiaArquivos();
             cp.copyAll(origem, downloads, true);
+            JOptionPane.showMessageDialog(null, "Arquivos " + nome + " copiados para: " + pastadeDownloads);
         }
+
     }
 
     public void abrirRelatorioMapasPorGaveta() throws JRException, SQLException {
@@ -358,6 +412,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         pesquisarMapas = new javax.swing.JButton();
         pesquisa = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+        jl_copiArquivo = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jM_cadastros = new javax.swing.JMenu();
         jM_fotografiaAerea = new javax.swing.JMenuItem();
@@ -432,7 +487,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel10.setText("Qtd:");
 
-        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/cprm_1.JPG"))); // NOI18N
+        jLabel11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/cprm.JPG"))); // NOI18N
 
         tipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "CARTA IMAGEM RADAR", "CARTA TOPOGRÁFICA","CARTA TEMÁTICA DE HIDROLOGIA","CARTA PLANIMÉTRICA","BASE PLANIMÉTRICA","MOSAICO SEMI CONTROLADO DE RADAR"}));
         tipo.addActionListener(new java.awt.event.ActionListener() {
@@ -732,7 +787,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
                         .addGap(18, 18, 18)
                         .addGroup(jP_MapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jP_campos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jl_copiArquivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
             .addGroup(jP_MapasLayout.createSequentialGroup()
                 .addContainerGap()
@@ -743,8 +799,11 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             jP_MapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jP_MapasLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jP_MapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel9)
+                    .addGroup(jP_MapasLayout.createSequentialGroup()
+                        .addComponent(jl_copiArquivo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(2, 2, 2)))
                 .addGroup(jP_MapasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jP_MapasLayout.createSequentialGroup()
                         .addComponent(jP_campos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -904,6 +963,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             Cursor cursorAguandando = new Cursor(Cursor.WAIT_CURSOR);
             setCursor(cursorAguandando);
             carregaImagem();
+
             Cursor cursorNormal = new Cursor(Cursor.DEFAULT_CURSOR);
             setCursor(cursorNormal);
         } catch (Exception ex) {
@@ -912,7 +972,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_carregarImagemActionPerformed
 
     private void zoomImagemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_zoomImagemActionPerformed
-        // envia um bufferedImage por paramentro para o ZoomImage
+
+// envia um bufferedImage por paramentro para o ZoomImage
         if (imagemMapa.getIcon() == null) {
             JOptionPane.showMessageDialog(null, "Selecione o Mapa Clicando na Tabela Abaixo !");
         } else {
@@ -929,7 +990,9 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
                 try {
                     Cursor cursorAguandando = new Cursor(Cursor.WAIT_CURSOR);
                     setCursor(cursorAguandando);
-                    Salvar();
+
+                    SalvaMapas();
+
                     Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
                     setCursor(normalCursor);
                 } catch (Exception ex) {
@@ -939,8 +1002,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             } else {
                 try {
                     //  verificaCampos();
-                    alterarDados();
-                    desabilitaBotoes();
+                    alteraMapas();
+
                 } catch (Exception ex) {
                     Logger.getLogger(CadMapa.class
                             .getName()).log(Level.SEVERE, null, ex);
@@ -951,6 +1014,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
             Logger.getLogger(CadMapa.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_SalvarMapaActionPerformed
 
 
@@ -966,8 +1030,8 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         if (id == null) {
             JOptionPane.showMessageDialog(null, "Selecione  os Dados Que Deseja Excluir Clicando na Linha da Tabela");
         } else {
-            int resp = JOptionPane.showConfirmDialog(null, "Deseja Realmente Excluir Estes Dados ?   " +mp.getTitulo()+ " "+mp.getFolha()+ JOptionPane.YES_NO_OPTION);
-            if (resp == JOptionPane.YES_NO_OPTION) {
+            int resp = JOptionPane.showConfirmDialog(null, "Deseja realmente excluir os dados do Mapa? " +mp.getTitulo(),null,+ JOptionPane.YES_NO_OPTION);
+            if (resp == JOptionPane.YES_NO_OPTION ) {
                 try {
                     removerMapas();
                     limpaCampos();
@@ -977,6 +1041,18 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
                             .getName()).log(Level.SEVERE, null, ex);
                 }
             }
+
+            int resp2 = JOptionPane.showConfirmDialog(null, "Deseja Também  Excluir as pastas do Mapa? "+mp.getTitulo(),null, + JOptionPane.YES_NO_OPTION);
+            if (resp2 == JOptionPane.YES_NO_OPTION) {
+                try {
+                    removePastaMapDir();
+
+                } catch (Exception ex) {
+                    Logger.getLogger(CadMapa.class
+                            .getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
         }
     }//GEN-LAST:event_DeletarActionPerformed
 
@@ -1004,6 +1080,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         try {
             Cursor cursorAguandando = new Cursor(Cursor.WAIT_CURSOR);
             setCursor(cursorAguandando);
+
             dounloadPastas();
             limpaCampos();
             Cursor normalCursor = new Cursor(Cursor.DEFAULT_CURSOR);
@@ -1059,7 +1136,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_jMenuItem6ActionPerformed
 
     private void jM_fotografiaAereaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_fotografiaAereaActionPerformed
-        CadFotografiasAerea fta = new CadFotografiasAerea();
+        CadMapaIndice fta = new CadMapaIndice();
         fta.setVisible(true);
 
     }//GEN-LAST:event_jM_fotografiaAereaActionPerformed
@@ -1070,7 +1147,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_jM_cadernetasActionPerformed
 
     private void jM_pesquisarfotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarfotografiasActionPerformed
-        CadFotografiasAerea fotografias = new CadFotografiasAerea();
+        CadFotografiaAerea fotografias = new CadFotografiaAerea();
         fotografias.setVisible(true);
     }//GEN-LAST:event_jM_pesquisarfotografiasActionPerformed
 
@@ -1173,6 +1250,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JLabel jl_copiArquivo;
     private javax.swing.JButton novoMapa;
     private javax.swing.JTextField pesquisa;
     private javax.swing.JButton pesquisarMapas;

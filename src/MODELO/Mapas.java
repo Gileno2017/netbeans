@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,10 +36,10 @@ public class Mapas implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @OneToMany(mappedBy = "mapas")
+    @OneToMany(mappedBy = "mapas",cascade = CascadeType.ALL)
     @JoinColumn(name = "codMapa")
 
-    private List<Fotografias> listadeFotografias;
+    private List<MapaIndice> listadeFotografias;
 
     @Id
     @GeneratedValue
@@ -56,11 +57,12 @@ public class Mapas implements Serializable {
 
     @NotNull(message = "O campo FOLHA não pode ser nulo")
     @NotBlank(message = "O campo FOLHA deve ser preenchido")
-      @Pattern(regexp = "([a-zA-Z]{2}\\.[0-9]{2}?\\-[a-zA-Z]{1}?\\-[a-zA-Z]{1}?\\-[0-9]{1}?)|([a-zA-Z]{2}\\.[0-9]{2}?\\-[a-zA-Z]{1}?\\-[a-zA-Z]{1}?)",
+      @Pattern(regexp = "([a-zA-Z]{2}\\.[0-9]{2}?\\-[a-zA-Z]{1}?\\-[a-zA-Z]{1}?\\-[a-zA-Z]{3}?)|([a-zA-Z]{2}\\.[0-9]{2}?\\-[a-zA-Z]{1}?\\-[a-zA-Z]{1}?)",
      message = "o campo FOLHA deve ser preenchido  com o formato (XX.11-X-X)  ou  (XX.11-X-X-1)")
     @Length(max = 20, message = "O FOLHA não pode conter mais de {max} caracteres")
     private String folha;
 
+    
     @NotNull(message = "O campo EDITORA não pode ser nulo")
     @NotBlank(message = "O campo EDITORA deve ser preenchido")
     @Pattern(regexp = "[A-Z\\/d\\s]+", message = "o campo EDITORA deve ser preenchido somente com letras e barra  / ")
@@ -94,11 +96,11 @@ public class Mapas implements Serializable {
     @NotBlank(message = "O campo HEMISFÉRIO deve ser preenchido")
     private String hemisferio;
 
-    public List<Fotografias> getListadeFotografias() {
+    public List<MapaIndice> getListadeFotografias() {
         return listadeFotografias;
     }
 
-    public void setListadeFotografias(List<Fotografias> listadeFotografias) {
+    public void setListadeFotografias(List<MapaIndice> listadeFotografias) {
         this.listadeFotografias = listadeFotografias;
     }
 

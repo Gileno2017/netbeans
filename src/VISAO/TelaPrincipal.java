@@ -46,7 +46,8 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
         jM_cadastrarMapas = new javax.swing.JMenuItem();
-        jM_cadastrarfotografias = new javax.swing.JMenuItem();
+        jM_cadastrarMapaIndece = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
         jM_cadastrarCadernetas = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jM_pesquisarMapas = new javax.swing.JMenuItem();
@@ -88,15 +89,25 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
         });
         jMenu2.add(jM_cadastrarMapas);
 
-        jM_cadastrarfotografias.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
-        jM_cadastrarfotografias.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/picture_photo_preview_2628.png"))); // NOI18N
-        jM_cadastrarfotografias.setText("Fotografias");
-        jM_cadastrarfotografias.addActionListener(new java.awt.event.ActionListener() {
+        jM_cadastrarMapaIndece.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
+        jM_cadastrarMapaIndece.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/picture_photo_preview_2628.png"))); // NOI18N
+        jM_cadastrarMapaIndece.setText("Mapa Índice");
+        jM_cadastrarMapaIndece.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jM_cadastrarfotografiasActionPerformed(evt);
+                jM_cadastrarMapaIndeceActionPerformed(evt);
             }
         });
-        jMenu2.add(jM_cadastrarfotografias);
+        jMenu2.add(jM_cadastrarMapaIndece);
+
+        jMenuItem3.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/picture_photo_preview_2628.png"))); // NOI18N
+        jMenuItem3.setText("Fotografia Aerea");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem3);
 
         jM_cadastrarCadernetas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK));
         jM_cadastrarCadernetas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/notebook_notes_147.png"))); // NOI18N
@@ -261,7 +272,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
     }//GEN-LAST:event_jM_pesquisarCadernetaActionPerformed
 
     private void jM_pesquisarfotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_pesquisarfotografiasActionPerformed
-        CadFotografiasAerea fotografias = new CadFotografiasAerea();
+        CadFotografiaAerea fotografias = new CadFotografiaAerea();
         fotografias.setVisible(true);
     }//GEN-LAST:event_jM_pesquisarfotografiasActionPerformed
 
@@ -270,10 +281,10 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
         cadernetas.setVisible(true);
     }//GEN-LAST:event_jM_cadastrarCadernetasActionPerformed
 
-    private void jM_cadastrarfotografiasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastrarfotografiasActionPerformed
-        CadFotografiasAerea fotografias = new CadFotografiasAerea();
-        fotografias.setVisible(true);
-    }//GEN-LAST:event_jM_cadastrarfotografiasActionPerformed
+    private void jM_cadastrarMapaIndeceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastrarMapaIndeceActionPerformed
+        CadMapaIndice cadMapaIndice = new CadMapaIndice();
+        cadMapaIndice.setVisible(true);
+    }//GEN-LAST:event_jM_cadastrarMapaIndeceActionPerformed
 
     private void jM_ListagemMapasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_ListagemMapasActionPerformed
         try {
@@ -318,6 +329,11 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
     private void jM_cadastroMapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM_cadastroMapaActionPerformed
        lerPDF();
     }//GEN-LAST:event_jM_cadastroMapaActionPerformed
+
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    CadFotografiaAerea imgAera = new CadFotografiaAerea();
+    imgAera.setVisible(true);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
      private void lerPDF(){
       if (Desktop.isDesktopSupported()) {
             // Arquivo no diretório de trabalho do usuário, System.getProperty ("user.dir");
@@ -404,8 +420,8 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
     private javax.swing.JMenuItem jM_ListagemPorFolha;
     private javax.swing.JMenuItem jM_ListagemPorTitulo;
     private javax.swing.JMenuItem jM_cadastrarCadernetas;
+    private javax.swing.JMenuItem jM_cadastrarMapaIndece;
     private javax.swing.JMenuItem jM_cadastrarMapas;
-    private javax.swing.JMenuItem jM_cadastrarfotografias;
     private javax.swing.JMenuItem jM_cadastroMapa;
     private javax.swing.JMenuItem jM_pesquisarCaderneta;
     private javax.swing.JMenuItem jM_pesquisarMapas;
@@ -417,6 +433,7 @@ public class TelaPrincipal extends javax.swing.JFrame implements Serializable {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     // End of variables declaration//GEN-END:variables
 }

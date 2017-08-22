@@ -14,14 +14,14 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author gileno.macedo
  */
-public class MapasTableModel extends AbstractTableModel{
+public class TableMapas extends AbstractTableModel{
     
       public List<Mapas> ListMapas;
     private final  MapasDao mDao = new MapasDao();
     
 
 
-    public MapasTableModel() {
+    public TableMapas() {
         this.ListMapas = new ArrayList();
          ListMapas = mDao.consultaMapas();         
 

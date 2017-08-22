@@ -6,7 +6,7 @@
 package CONTROLE;
 
 import MODELO.Caderneta;
-import MODELO.ImagemMapas;
+import MODELO.FotografiaAerea;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -21,7 +21,7 @@ import javax.persistence.criteria.Root;
  * @author gileno.macedo
  */
 
-public class ImagemMapasDao {
+public class FotografiaAereaDao {
   
     public EntityManager getEM(){
      EntityManagerFactory factory = Persistence.createEntityManagerFactory("ArqMapasPU");
@@ -30,17 +30,17 @@ public class ImagemMapasDao {
     }
   
     
-      public ImagemMapas salvarImagemMapas(ImagemMapas  img)throws Exception {
+      public FotografiaAerea salvarImagemMapas(FotografiaAerea  img)throws Exception {
             EntityManager em = getEM();
 
             try{
             em.getTransaction().begin();
-            if(img.getIdImagemMapas() == null){
+            if(img.getIdIFotografiaAerea() == null){
                 em.persist(img);// salva  as Imagens do mapa no banco de dados
                 
               }else{
                 if(!em.contains(img)){
-                   if(em.find(ImagemMapas.class,img.getIdImagemMapas())== null){
+                   if(em.find(FotografiaAerea.class,img.getIdIFotografiaAerea())== null){
                      throw new Exception("Erro ao Salvar a Imagem");
                    }
                 }
@@ -58,7 +58,7 @@ public class ImagemMapasDao {
       public void removeImagemMapas(Long id)throws Exception{
           
               EntityManager em = getEM();
-              ImagemMapas img = em.find(ImagemMapas.class, id);
+              FotografiaAerea img = em.find(FotografiaAerea.class, id);
              try {
                   em.getTransaction().begin();
                   em.remove(img);// remove o imagem selecionada
@@ -69,12 +69,12 @@ public class ImagemMapasDao {
           
       }
       
-       public ImagemMapas consultaImagemMapasPorId(Long id){
+       public FotografiaAerea consultaImagemMapasPorId(Long id){
               EntityManager em = getEM();
-              ImagemMapas img = null;
+              FotografiaAerea img = null;
               try {
                em.getTransaction().begin();
-               img = em.find(ImagemMapas.class, id);
+               img = em.find(FotografiaAerea.class, id);
                em.getTransaction().commit();
               } finally {
                em.close();
@@ -83,19 +83,19 @@ public class ImagemMapasDao {
              return img;
           }
           
-       public List<ImagemMapas> consultaTodasImagemMapas(){
+       public List<FotografiaAerea> consultaTodasFotografiaAerea(){
            EntityManager em = getEM();
-           List<ImagemMapas> listImagemMapas;
+           List<FotografiaAerea> listFotografiaAerea;
            
            try {
-               Query q = em.createNamedQuery("ImagemMapas.ConsultaTodos");
-               listImagemMapas = q.getResultList();
+               Query q = em.createNamedQuery("FotografiaAerea.ConsultaTodos");
+               listFotografiaAerea = q.getResultList();
            } catch (Exception e) {
-               listImagemMapas = new ArrayList();
+               listFotografiaAerea = new ArrayList();
            }finally{
            em.close();
             }
-         return listImagemMapas;
+         return listFotografiaAerea;
       
        }
        
@@ -106,7 +106,7 @@ public class ImagemMapasDao {
         EntityManager em = getEM();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<ImagemMapas> rt = cq.from(ImagemMapas.class);
+            Root<FotografiaAerea> rt = cq.from(FotografiaAerea.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
@@ -115,20 +115,20 @@ public class ImagemMapasDao {
         }
     }
     
-  public List<ImagemMapas> consultaImagensPorFotografias(Long id){
+  public List<FotografiaAerea> consultaImagensPorFotografiaAerea(Long id){
            EntityManager em = getEM();
-           List<ImagemMapas> listImagemMapas;
+           List<FotografiaAerea> listFotografiaAerea;
            
            try {
-               Query q = em.createNamedQuery("imagemMapas.consultaPorFotografias");
-               q.setParameter("fotosId", id);
-               listImagemMapas = q.getResultList();
+               Query q = em.createNamedQuery("FotografiaAerea.consultaPorFotografiaAerea");
+               q.setParameter("consultaPorFotografiaAereaId", id);
+               listFotografiaAerea = q.getResultList();
            } catch (Exception e) {
-               listImagemMapas = new ArrayList();
+               listFotografiaAerea = new ArrayList();
            }finally{
            em.close();
             }
-         return listImagemMapas;
+         return listFotografiaAerea;
       
        }
        

@@ -14,12 +14,12 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author gileno.macedo
  */
-public class CadernetaTableModel extends AbstractTableModel{
+public class TableCaderneta extends AbstractTableModel{
      public List<Caderneta> listCadernetas;
      private final   CadernetaDao cDao = new CadernetaDao();     
    
      
-    public CadernetaTableModel() {
+    public TableCaderneta() {
                 this.listCadernetas = new ArrayList();
                 listCadernetas = cDao.consultaTodasCadernetas();
            
