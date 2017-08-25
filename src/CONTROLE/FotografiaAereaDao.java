@@ -30,7 +30,7 @@ public class FotografiaAereaDao {
     }
   
     
-      public FotografiaAerea salvarImagemMapas(FotografiaAerea  img)throws Exception {
+      public FotografiaAerea salvarFotografiaAerea(FotografiaAerea  img)throws Exception {
             EntityManager em = getEM();
 
             try{
@@ -115,13 +115,13 @@ public class FotografiaAereaDao {
         }
     }
     
-  public List<FotografiaAerea> consultaImagensPorFotografiaAerea(Long id){
+  public List<FotografiaAerea> consultaImagensPorFotografiaAerea(Long mapaId){
            EntityManager em = getEM();
            List<FotografiaAerea> listFotografiaAerea;
            
            try {
-               Query q = em.createNamedQuery("FotografiaAerea.consultaPorFotografiaAerea");
-               q.setParameter("consultaPorFotografiaAereaId", id);
+               Query q = em.createNamedQuery("FotografiaAerea.consultaPorFotografiaAereaID");
+               q.setParameter("mapaId", mapaId);
                listFotografiaAerea = q.getResultList();
            } catch (Exception e) {
                listFotografiaAerea = new ArrayList();

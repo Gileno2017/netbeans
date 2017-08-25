@@ -27,6 +27,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.TableModel;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
@@ -40,7 +41,8 @@ import net.sf.jasperreports.engine.JRException;
 public class CadFotografiaAerea extends javax.swing.JFrame implements Serializable {
 
     TableMapaIndice modeloTabelaMapaIndice = new TableMapaIndice();
-    TableFotograiaAerea modeloTabelaFotografiaAerea = new TableFotograiaAerea();
+     TableFotograiaAerea modeloTabelaFotografiaAerea  = new TableFotograiaAerea();
+ 
 
     MapaIndice mapaIndice;
     Long idMapaIndice, id;
@@ -52,13 +54,15 @@ public class CadFotografiaAerea extends javax.swing.JFrame implements Serializab
     ListIterator<FotografiaAerea> listIterator;
     FotografiaAerea primeiroElemento, fotoAerea;
     List<FotografiaAerea> listaFotografiasAereas;
-    String nomeImagemSelecionada, caminhoMapaIndiceBD, caminhoImagemCapturada;
+    String nomeImagemSelecionada, caminhoMapaIndiceBD, caminhoImagemCapturada,caminhoPastaMapaIndicenobanco;
     File fileDestino;
 
     /**
      * Creates new form CadFotografias
      */
     public CadFotografiaAerea() {
+       
+     
         initComponents();
         setLocationRelativeTo(null);
         totalFotografiaAerea();
@@ -70,9 +74,14 @@ public class CadFotografiaAerea extends javax.swing.JFrame implements Serializab
         modeloTabelaMapaIndice.consultaMapaIndicePorNome(pesquisasDemapas.getText().toUpperCase());
     }
 
-    public void linhaSelecionadaTableMapaIndice() throws IOException {
-        mapaIndice = modeloTabelaMapaIndice.getLinhaMapaIndice(tabelaMapaIndice.getSelectedRow());
+    public void linhaSelecionadaTableMapaIndice() throws IOException, Exception {
+        
+        mapaIndice = modeloTabelaMapaIndice.getLinhaMapaIndice(tabelaMapaIndice.getSelectedRow());        
         idMapaIndice = mapaIndice.getCod_MapaIndice();
+        
+        modeloTabelaFotografiaAerea.listaFotografiaPorId(idMapaIndice);
+        modeloTabelaFotografiaAerea.atualizaListadeFotografiaAerea(fotoAerea);
+        
         folha.setText(mapaIndice.getFolhaFotografia());
         escala.setText(mapaIndice.getEscala());
         orgaoExecutor.setText(mapaIndice.getOrgaoExecutor());
@@ -80,11 +89,13 @@ public class CadFotografiaAerea extends javax.swing.JFrame implements Serializab
         folha.setEditable(false);
         orgaoExecutor.setEditable(false);
         caminhoMapaIndiceBD = mapaIndice.getCaminhoMapaIndeceBD();
+        caminhoPastaMapaIndicenobanco = mapaIndice.getCaminhoPastaBD();
         String caminhoImagemSalva = mapaIndice.getCaminhoMapaIndeceBD();        
         imagemMapa.setIcon(redimencionaImagem2(caminhoImagemSalva));
     }
 
     public void linhaSelecionadaTableFotografiaAerea() throws IOException {
+       
         fotoAerea = modeloTabelaFotografiaAerea.getLinhaFotografiaAerea(tabelaFotografiaAerea.getSelectedRow());
         idMapaIndice = mapaIndice.getCod_MapaIndice();
         mapaIndice.getMapas().getCodMapa();
@@ -97,16 +108,12 @@ public class CadFotografiaAerea extends javax.swing.JFrame implements Serializab
 
         FotografiaAereaDao fotografiaAereaDao = new FotografiaAereaDao();// cria um novo objeto da class imagemMapasDao
         listaFotografiasAereas = fotografiaAereaDao.consultaImagensPorFotografiaAerea(idMapaIndice);// traz os objetos contidos no banco de dados
-
         listIterator = listaFotografiasAereas.listIterator();
         listIterator.next();
         primeiroElemento = listaFotografiasAereas.get(listIterator.nextIndex() + 1);
-        String mapaCapiturado = primeiroElemento.getImagemFotografiaAerea();
-        JOptionPane.showMessageDialog(null, mapaCapiturado);
-       
+        String mapaCapiturado = primeiroElemento.getImagemFotografiaAerea();            
         folha.setEditable(false);
         escala.setEditable(false);
-
     }
 
     @SuppressWarnings("unchecked")
@@ -659,7 +666,7 @@ public class CadFotografiaAerea extends javax.swing.JFrame implements Serializab
         MapaIndice mapIndice = new MapaIndice();
         mapIndice.setCod_MapaIndice(idMapaIndice);
         mapIndice.setCaminhoMapaIndeceBD(caminhoMapaIndiceBD);        
-        fotografiaAerea.setImagemFotografiaAerea(caminhoMapaIndiceBD + nomeImagemSelecionada+"\\"+nomeImagemSelecionada);
+        fotografiaAerea.setImagemFotografiaAerea(caminhoPastaMapaIndicenobanco+ "\\"+nomeImagemSelecionada);
         fotografiaAerea.setNumeroImagem(numeroInicial.getText().toUpperCase());
         fotografiaAerea.setLocalArmazenado(caixaLocalização.getText().toUpperCase());
         fotografiaAerea.setMpIndiceImagem(mapIndice);
@@ -673,14 +680,15 @@ public class CadFotografiaAerea extends javax.swing.JFrame implements Serializab
                 JOptionPane.showMessageDialog(null, error.getMessage());
             }
         } else {
-            CopiaArquivos copy = new CopiaArquivos();
-            copy.copiaArquivo(fileArquivoselecionado, nomeImagemSelecionada, caminhoMapaIndiceBD);//copia a imagem selecionada para uma pasta no servidor de arquivos
-
-            //Envia os dados do mapa para a tabela e salva no banco de dados            
-            modeloTabelaFotografiaAerea.salvaFotografiaAerea(fotografiaAerea);
+           
+            CopiaArquivos copy = new CopiaArquivos();         
+             copy.copyFileUsingStream(fileArquivoselecionado,caminhoPastaMapaIndicenobanco);//copia a imagem selecionada para uma pasta no servidor de arquivos
+            
+           //Envia os dados do mapa para a tabela e salva no banco de dados            
+           // modeloTabelaFotografiaAerea.salvaFotografiaAerea(fotografiaAerea);
             FotografiaAereaDao imDao = new FotografiaAereaDao();
-            imDao.salvarImagemMapas(fotografiaAerea);
-            modeloTabelaFotografiaAerea.atualizaListadeFotografiaAerea(fotografiaAerea);
+            imDao.salvarFotografiaAerea(fotografiaAerea);
+           // modeloTabelaFotografiaAerea.atualizaListadeFotografiaAerea(fotografiaAerea);
             numeroInicial.setText("");
             caixaLocalização.setText("");
             imagemMapa.setIcon(null);
@@ -690,7 +698,8 @@ public class CadFotografiaAerea extends javax.swing.JFrame implements Serializab
     public void removerFotografias() {
         MapaIndiceDao fotografiaDao = new MapaIndiceDao();
         fotografiaDao.removeMapaIndice(idMapaIndice);
-        modeloTabelaFotografiaAerea.removeFotografiaAerea(fotoAerea);
+        
+        //modeloTabelaFotografiaAerea.removeFotografiaAerea(fotoAerea);
     }
 
     public void limpaCampos() {
@@ -706,7 +715,6 @@ public class CadFotografiaAerea extends javax.swing.JFrame implements Serializab
         FotografiaAereaDao fotografiaAereaDao = new FotografiaAereaDao();
         int totalFotografiasAereas = fotografiaAereaDao.getImagemMapasCount();
         totalfotografiaAerea.setText(String.valueOf(totalFotografiasAereas));
-
     }
 
     private void totalMapaIndice() {
@@ -764,7 +772,7 @@ public class CadFotografiaAerea extends javax.swing.JFrame implements Serializab
        // copiaArquivos.addUmArquivo(fileArquivoselecionado, nomeImagemSelecionada, caminho);
         fotografiaAerea.setImagemFotografiaAerea(caminho + "\\" + nomeImagemSelecionada);
         fotografiaAerea.setMpIndiceImagem(fotografias);
-        fotoAereaDao.salvarImagemMapas(fotografiaAerea);
+        fotoAereaDao.salvarFotografiaAerea(fotografiaAerea);
     }
 
     public void exibiImagemLabel(byte[] minhaImg, javax.swing.JLabel label) throws IOException {
@@ -924,6 +932,8 @@ public class CadFotografiaAerea extends javax.swing.JFrame implements Serializab
         try {
             linhaSelecionadaTableMapaIndice();
         } catch (IOException ex) {
+            Logger.getLogger(CadFotografiaAerea.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
             Logger.getLogger(CadFotografiaAerea.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_tabelaMapaIndiceMouseClicked

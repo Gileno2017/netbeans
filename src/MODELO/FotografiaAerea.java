@@ -28,10 +28,10 @@ import org.hibernate.validator.constraints.NotBlank;
 @Entity
 @NamedQueries({
     @NamedQuery(name = "FotografiaAerea.ConsultaTodos",
-            query = "SELECT e FROM  FotografiaAerea e"),})
-//    @NamedQuery(name="FotografiaAerea.consultaPorFotografiaAerea",
-//       query = "SELECT e FROM FotografiaAerea e WHERE  e.FotografiaAerea.cod_MapaIndice = :consultaPorFotografiaAereaId " ),
-//})
+            query = "SELECT e FROM  FotografiaAerea e"),
+    @NamedQuery(name="FotografiaAerea.consultaPorFotografiaAereaID",
+       query = "SELECT f FROM FotografiaAerea f WHERE  f.mpIndiceImagem.cod_MapaIndice =:mapaId" )
+})
 
 public class FotografiaAerea implements Serializable {
 

@@ -69,7 +69,7 @@ public class CadMapa extends javax.swing.JFrame implements Serializable {
         //Envia os dados do mapa para a tabela e salva no banco de dados            
         //seleciona o caminhoPastaCapiturada onde sera capturado a pasta com os mapas
         JFileChooser chooser = new JFileChooser("c:\\");
-        chooser.setDialogTitle("Deseja altera os arquivos dos mapas? " + titulo.getText());
+        chooser.setDialogTitle("Uploud das pastas Georeferenciadas do Mapa  " + titulo.getText().toUpperCase());
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);//captura somente pastas
         int res = chooser.showOpenDialog(null);
         if (res == JFileChooser.APPROVE_OPTION) {

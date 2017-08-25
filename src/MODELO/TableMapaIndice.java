@@ -29,7 +29,7 @@ public class TableMapaIndice extends AbstractTableModel{
 
     @Override
     public int getColumnCount() {
-      return 4;
+      return 3;
     }
     
     @Override
@@ -41,8 +41,7 @@ public class TableMapaIndice extends AbstractTableModel{
                 return "Orgão Execultor";
             case 2:
                 return "Escala";
-            case 3:
-                return "Folha Mapa";
+            
            
               
             default:
@@ -62,9 +61,7 @@ public class TableMapaIndice extends AbstractTableModel{
                 return  mpIndice.getOrgaoExecutor();
             case 2:
                 return mpIndice.getEscala();
-            case 3: 
-                return mpIndice.getMapas().getFolha();
-                  
+            
             
            default:
                 return "";

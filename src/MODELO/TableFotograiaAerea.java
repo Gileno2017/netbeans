@@ -8,6 +8,7 @@ package MODELO;
 import CONTROLE.FotografiaAereaDao;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -20,9 +21,9 @@ public class TableFotograiaAerea extends AbstractTableModel{
     private final FotografiaAereaDao fotografiaAereaDao = new FotografiaAereaDao();
     
 
-    public TableFotograiaAerea(){
-     this.listaFotografiaAerea = new ArrayList<>();
-   listaFotografiaAerea = fotografiaAereaDao.consultaTodasFotografiaAerea();
+   public TableFotograiaAerea(  ){
+   this.listaFotografiaAerea = new ArrayList<>(0);
+  
 
 }
     
@@ -60,6 +61,7 @@ public class TableFotograiaAerea extends AbstractTableModel{
           switch (columnIndex) {
 
             case 0:
+               // return fotografiaAerea.getMpIndiceImagem().getMapas().getFolha();
                 return fotografiaAerea.getMpIndiceImagem().getMapas().getFolha();
                         
             case 1:
@@ -84,7 +86,7 @@ public void atualizaListadeFotografiaAerea(FotografiaAerea f)  throws Exception 
     }
     
     public void salvaFotografiaAerea(FotografiaAerea im) throws Exception{
-    im  = fotografiaAereaDao.salvarImagemMapas(im);
+    im  = fotografiaAereaDao.salvarFotografiaAerea(im);
     listaFotografiaAerea.add(im);
     fireTableRowsInserted(listaFotografiaAerea.size() - 1, listaFotografiaAerea.size() - 1);
     
@@ -94,5 +96,12 @@ public void atualizaListadeFotografiaAerea(FotografiaAerea f)  throws Exception 
         listaFotografiaAerea.remove(im);
         fireTableRowsInserted(listaFotografiaAerea.size() - 1, listaFotografiaAerea.size() - 1);
     }
+     
+     public void listaFotografiaPorId(long id){    
+     
+    this.listaFotografiaAerea = new ArrayList<>();
+   listaFotografiaAerea = fotografiaAereaDao.consultaImagensPorFotografiaAerea(id);
+                
+     }
     
 }

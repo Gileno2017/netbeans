@@ -62,7 +62,9 @@ public class MapaIndice implements Serializable {
     
     @NotNull(message = " Selecione um campo na Tabela de Mapas! ")
     @NotBlank(message = "Selecione um campo na Tabela de Mapas! ")    
-    private String caminhoMapaIndeceBD;
+    private String caminhoMapaIndeceBD;    
+   
+    private String caminhoPastaBD;
     
     @NotNull(message = " O campo  Escala  não pode ser nulo")
     @NotBlank(message = "Selecione a Escala! ") 
@@ -155,6 +157,22 @@ public class MapaIndice implements Serializable {
 
     public void setFolhaFotografia(String folhaFotografia) {
         this.folhaMapaIndice = folhaFotografia;
+    }
+
+    public String getFolhaMapaIndice() {
+        return folhaMapaIndice;
+    }
+
+    public String getCaminhoPastaBD() {
+        return caminhoPastaBD;
+    }
+
+    public void setFolhaMapaIndice(String folhaMapaIndice) {
+        this.folhaMapaIndice = folhaMapaIndice;
+    }
+
+    public void setCaminhoPastaBD(String caminhoPastaBD) {
+        this.caminhoPastaBD = caminhoPastaBD;
     }
 
    

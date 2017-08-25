@@ -58,7 +58,7 @@ public class CadMapaIndice extends javax.swing.JFrame implements Serializable {
     ListIterator<FotografiaAerea> listIterator;
     FotografiaAerea primeiroElemento;
     List<FotografiaAerea> listaMapas;
-    String nomeImagemSelecionada, caminhoMapaBd, caminhoImagemCapturada,pastaCriadanobanco;
+    String nomeImagemSelecionada, caminhoMapaBd, caminhoImagemCapturada;
     File fileDestino;
 
     public CadMapaIndice() {
@@ -75,7 +75,8 @@ public class CadMapaIndice extends javax.swing.JFrame implements Serializable {
         mpIndice.setEscala(escala.getSelectedItem().toString().toUpperCase());
         mpIndice.setFolhaFotografia(folha.getText().toUpperCase());
         mpIndice.setOrgaoExecutor(orgaoExecutor.getText().toUpperCase());       
-        mpIndice.setCaminhoMapaIndeceBD(caminhoMapaBd +nomeImagemSelecionada+"\\"+nomeImagemSelecionada);
+        mpIndice.setCaminhoMapaIndeceBD(caminhoMapaBd +" - ("+ nomeImagemSelecionada+")"+"\\"+nomeImagemSelecionada);
+        mpIndice.setCaminhoPastaBD(caminhoMapaBd +" - ("+ nomeImagemSelecionada+")");
         
         mpIndice.setMapas(mapas);
         
@@ -89,7 +90,7 @@ public class CadMapaIndice extends javax.swing.JFrame implements Serializable {
             }
         } else {
             CopiaArquivos copy = new CopiaArquivos();          
-            copy.copiaArquivo(fileArquivoselecionado,nomeImagemSelecionada,caminhoMapaBd);//copia a imagem selecionada para uma pasta no servidor de arquivos
+            copy.copiaMapaIndice(fileArquivoselecionado,nomeImagemSelecionada,caminhoMapaBd,true);//copia a imagem selecionada para uma pasta no servidor de arquivos
              
             //Envia os dados do mapa para a tabela e salva no banco de dados            
             modeTabelaFotografias.salvaMapaIndice(mpIndice);
