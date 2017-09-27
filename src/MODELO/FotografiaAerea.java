@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MODELO;
+package cprm.gov.gileno.macedo.MODELO;
 
 import java.io.Serializable;
 import java.util.Objects;

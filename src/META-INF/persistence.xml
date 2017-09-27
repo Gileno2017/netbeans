@@ -2,10 +2,11 @@
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
   <persistence-unit name="ArqMapasPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-    <class>MODELO.Caderneta</class>
-    <class>MODELO.MapaIndice</class>
-    <class>MODELO.Mapas</class>
-    <class>MODELO.FotografiaAerea</class>
+    <class>cprm.gov.gileno.macedo.MODELO.Usuario</class>
+    <class>cprm.gov.gileno.macedo.MODELO.FotografiaAerea</class>
+    <class>cprm.gov.gileno.macedo.MODELO.Mapas</class>
+    <class>cprm.gov.gileno.macedo.MODELO.Caderneta</class>
+    <class>cprm.gov.gileno.macedo.MODELO.MapaIndice</class>
     <shared-cache-mode>ALL</shared-cache-mode>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://10.3.2.72:5432/Mapoteca"/>

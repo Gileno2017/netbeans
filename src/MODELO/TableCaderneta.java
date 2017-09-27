@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package MODELO;
+package cprm.gov.gileno.macedo.MODELO;
 
-import CONTROLE.CadernetaDao;
+import cprm.gov.gileno.macedo.CONTROLE.CadernetaDao;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;

@@ -1,7 +1,7 @@
 
-package MODELO;
+package cprm.gov.gileno.macedo.MODELO;
 
-import CONTROLE.MapaIndiceDao;
+import cprm.gov.gileno.macedo.CONTROLE.MapaIndiceDao;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;

@@ -1,4 +1,4 @@
-package MODELO;
+package cprm.gov.gileno.macedo.MODELO;
 
 import java.io.File;
 import java.io.FileInputStream;
